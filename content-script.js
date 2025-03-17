@@ -8,6 +8,16 @@ function deleteSpansFeedPostParent(element, count) {
     }
 }
 
+function deleteSpansFeedPromotedPostParent(element, count) {
+    if (count == 7) {
+        element.remove();
+        return;
+    }
+    else {
+        deleteSpansFeedPromotedPostParent(element.parentNode, count + 1);
+    }
+}
+
 function findSuggestedPostSpans() {
     const spans = Array.from(document.getElementsByTagName("span"))
         .filter(span => span.innerHTML === "\n            <!---->Suggested<!---->\n          ");
@@ -18,9 +28,20 @@ function findSuggestedPostSpans() {
     })
 }
 
+function findPromotedPostSpans() {
+    const spans = Array.from(document.getElementsByTagName("span"))
+        .filter(span => span.innerHTML === "<!---->Promoted<!---->");
+
+    spans.forEach((s) => {
+        s.innerHTML = "<!---->REMOVING Promoted POST SOON!!!<!---->";
+        deleteSpansFeedPromotedPostParent(s, 0);
+    })
+}
+
 // detect scroll
 document.addEventListener("scroll", () => {
     findSuggestedPostSpans();
+    findPromotedPostSpans()
     console.log("scroll detected")
 });
 
@@ -34,6 +55,7 @@ window.onload = function () {
         if (!hasRun) {
             hasRun = true;
             findSuggestedPostSpans();
+            findPromotedPostSpans();
         }
     }
 
