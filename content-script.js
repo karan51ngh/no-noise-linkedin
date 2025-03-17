@@ -1,47 +1,34 @@
-function deleteSpansFeedPostParent(element, count) {
-    if (count == 4) {
+function deleteUnwantedSpans(type, element, count) {
+    if ((type === 'suggested' && count === 7) || (type === 'promoted' && count === 9)) {
+        console.log("Unwanted Post Detected")
         element.remove();
         return;
     }
     else {
-        deleteSpansFeedPostParent(element.parentNode, count + 1);
+        deleteUnwantedSpans(type, element.parentNode, count + 1);
     }
 }
 
-function deleteSpansFeedPromotedPostParent(element, count) {
-    if (count == 7) {
-        element.remove();
-        return;
-    }
-    else {
-        deleteSpansFeedPromotedPostParent(element.parentNode, count + 1);
-    }
-}
-
-function findSuggestedPostSpans() {
-    const spans = Array.from(document.getElementsByTagName("span"))
+function findUnwantedSpans() {
+    const suggestedSpans = Array.from(document.getElementsByTagName("span"))
         .filter(span => span.innerHTML === "\n            <!---->Suggested<!---->\n          ");
-
-    spans.forEach((s) => {
-        s.innerHTML = "\n            <!---->REMOVING Suggested POST SOON!!!<!---->\n          ";
-        deleteSpansFeedPostParent(s, 0);
-    })
-}
-
-function findPromotedPostSpans() {
-    const spans = Array.from(document.getElementsByTagName("span"))
+    
+    const promotedSpans = Array.from(document.getElementsByTagName("span"))
         .filter(span => span.innerHTML === "<!---->Promoted<!---->");
 
-    spans.forEach((s) => {
+    suggestedSpans.forEach((s) => {
+        s.innerHTML = "\n            <!---->REMOVING Suggested POST SOON!!!<!---->\n          ";
+        deleteUnwantedSpans('suggested',s, 0);
+    })
+
+    promotedSpans.forEach((s) => {
         s.innerHTML = "<!---->REMOVING Promoted POST SOON!!!<!---->";
-        deleteSpansFeedPromotedPostParent(s, 0);
+        deleteUnwantedSpans('promoted',s, 0);
     })
 }
 
-// detect scroll
 document.addEventListener("scroll", () => {
-    findSuggestedPostSpans();
-    findPromotedPostSpans()
+    findUnwantedSpans();
     console.log("scroll detected")
 });
 
@@ -51,21 +38,21 @@ window.onload = function () {
     let hasRun = false; // Flag to track execution
 
     function runOnce() {
-        console.log("run once")
+
         if (!hasRun) {
             hasRun = true;
-            findSuggestedPostSpans();
-            findPromotedPostSpans();
+            findUnwantedSpans();
         }
     }
 
-    runOnce(); // Initial execution
+    findUnwantedSpans(); // Initial execution
 
     let observer = new MutationObserver((mutations) => {
         console.log("mutation occurred");
         if (!hasRun) {
             runOnce();
             observer.disconnect(); // Stop observing after the first run
+            console.log("Observer disconnected");
         }
     });
 
