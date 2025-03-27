@@ -10,6 +10,12 @@ NoNoise LinkedIn is a browser extension that cleans up your LinkedIn feed by rem
 - Removes **Sponsored Ads** from your LinkedIn feed.
 - Lightweight and **privacy-friendly** – no tracking!
 
+### Feature Demonstration
+<p align="center">
+  <img src="https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/1.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/2.png" width="45%" />
+</p>
+
 ## How to use it
 
 Simply install the extension and forget it. Now, whenever you browse LinkedIn, your feed will automatically be free from **Suggested** and **Sponsored** posts.
@@ -26,15 +32,16 @@ Simply install the extension and forget it. Now, whenever you browse LinkedIn, y
 
 ### Chrome (via Chrome Web Store)
 
-- Extension under review by Google.
-- Status: 'Pending Review'.
+- Go to the [Chrome Web Store](https://chromewebstore.google.com/detail/hbcjelfhlljdepmifggbmhnklhmdmldn?utm_source=item-share-cb)
+- Click **Add to Chrome**.
+- Enjoy a clutter-free LinkedIn experience!
 
 ### Firefox (via Add-ons Store)
 
 - Will start implementing this after the Chrome version stabilizes.
-- Coming Soon.
+- **Coming Soon**.
 
-##  How It Works
+## How It Works
 
 NoNoise LinkedIn uses simple DOM manipulation to identify and remove unwanted content from your LinkedIn feed. The extension does **not** collect or store any user data.
 
@@ -63,3 +70,6 @@ Have questions or suggestions? Feel free to reach out!
 - LinkedIn: [karan51ngh](https://www.linkedin.com/in/karan51ngh/)
 - X / Twitter: [karan_51ngh](https://x.com/karan_51ngh)
 
+## Thank You for Using NoNoise LinkedIn!
+
+![NoNoise LinkedIn Logo](https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/3.png)

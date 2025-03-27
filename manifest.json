@@ -3,9 +3,6 @@
     "name": "NoNoise Linkedin",
     "description": "Own your time.",
     "version": "1.0",
-    "permissions": [
-        "scripting"
-    ],
     "host_permissions": [
         "https://www.linkedin.com/"
     ],
