@@ -32,7 +32,7 @@ Simply install the extension and forget it. Now, whenever you browse LinkedIn, y
 
 ### Chrome (via Chrome Web Store)
 
-- Go to the [Chrome Web Store](https://chromewebstore.google.com/detail/hbcjelfhlljdepmifggbmhnklhmdmldn?utm_source=item-share-cb)
+- Go to the [Chrome Web Store](https://chromewebstore.google.com/detail/hbcjelfhlljdepmifggbmhnklhmdmldn)
 - Click **Add to Chrome**.
 - Enjoy a clutter-free LinkedIn experience!
 
