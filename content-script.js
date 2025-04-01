@@ -1,6 +1,8 @@
+DEV_LOGS = false;
+
 function deleteUnwantedSpans(type, element, count) {
     if ((type === 'suggested' && count === 7) || (type === 'promoted' && count === 9)) {
-        console.log("Unwanted Post Detected")
+        DEV_LOGS && console.log("Unwanted Post Detected")
         element.remove();
         return;
     }
@@ -11,29 +13,37 @@ function deleteUnwantedSpans(type, element, count) {
 
 function findUnwantedSpans() {
     const suggestedSpans = Array.from(document.getElementsByTagName("span"))
-        .filter(span => span.innerHTML === "\n            <!---->Suggested<!---->\n          ");
-    
+        .filter((span) => {
+            if (span.innerHTML.includes("Suggested")) {
+                DEV_LOGS && console.log("Suggested post detected.")
+                return true;
+            }
+        });
+
     const promotedSpans = Array.from(document.getElementsByTagName("span"))
-        .filter(span => span.innerHTML === "<!---->Promoted<!---->");
+        .filter((span) => {
+            if (span.innerHTML.includes("Promoted")) {
+                DEV_LOGS && console.log("Promoted post detected.")
+                return true;
+            }
+        });
 
     suggestedSpans.forEach((s) => {
-        s.innerHTML = "\n            <!---->REMOVING Suggested POST SOON!!!<!---->\n          ";
         deleteUnwantedSpans('suggested',s, 0);
     })
 
     promotedSpans.forEach((s) => {
-        s.innerHTML = "<!---->REMOVING Promoted POST SOON!!!<!---->";
         deleteUnwantedSpans('promoted',s, 0);
     })
 }
 
 document.addEventListener("scroll", () => {
     findUnwantedSpans();
-    console.log("scroll detected")
+    DEV_LOGS && console.log("scroll detected")
 });
 
 window.onload = function () {
-    console.log("Hello Friend");
+    DEV_LOGS && console.log("Hello Friend");
 
     let hasRun = false; // Flag to track execution
 
@@ -48,11 +58,11 @@ window.onload = function () {
     findUnwantedSpans(); // Initial execution
 
     let observer = new MutationObserver((mutations) => {
-        console.log("mutation occurred");
+        DEV_LOGS && console.log("mutation occurred");
         if (!hasRun) {
             runOnce();
             observer.disconnect(); // Stop observing after the first run
-            console.log("Observer disconnected");
+            DEV_LOGS && console.log("Observer disconnected");
         }
     });
 
