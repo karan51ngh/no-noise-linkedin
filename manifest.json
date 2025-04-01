@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "name": "NoNoise LinkedIn",
-    "description": "NoNoise LinkedIn is a Free and Open Source Chrome extension that cleans up your LinkedIn by removing all Suggested and Promoted posts.",
-    "version": "1.0",
+    "description": "NoNoise LinkedIn is a Free and Open Source extension that cleans up your LinkedIn feed by removing Suggested and Promoted posts.",
+    "version": "1.2.0",
     "host_permissions": [
         "https://www.linkedin.com/"
     ],
