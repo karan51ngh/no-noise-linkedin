@@ -37,34 +37,14 @@ function findUnwantedSpans() {
     })
 }
 
-document.addEventListener("scroll", () => {
+let observer = new MutationObserver(() => {
+    DEV_LOGS && console.log("mutation occurred");
     findUnwantedSpans();
-    DEV_LOGS && console.log("scroll detected")
 });
+
+observer.observe(document.body, { childList: true, subtree: true });
 
 window.onload = function () {
     DEV_LOGS && console.log("Hello Friend");
-
-    let hasRun = false; // Flag to track execution
-
-    function runOnce() {
-
-        if (!hasRun) {
-            hasRun = true;
-            findUnwantedSpans();
-        }
-    }
-
     findUnwantedSpans(); // Initial execution
-
-    let observer = new MutationObserver((mutations) => {
-        DEV_LOGS && console.log("mutation occurred");
-        if (!hasRun) {
-            runOnce();
-            observer.disconnect(); // Stop observing after the first run
-            DEV_LOGS && console.log("Observer disconnected");
-        }
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
 };
