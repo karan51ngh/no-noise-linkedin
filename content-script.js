@@ -39,7 +39,7 @@ function findUnwantedSpans() {
 
 let observer = new MutationObserver(() => {
     DEV_LOGS && console.log("mutation occurred");
-    findUnwantedSpans();
+    if (window.location.href.includes('feed')) findUnwantedSpans();
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
