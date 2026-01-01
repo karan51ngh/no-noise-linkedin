@@ -1,17 +1,17 @@
-DEV_LOGS = false;
+const DEV_LOGS = false;
 
-function deleteUnwantedSpans(type, element, count) {
+export  function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: number) {
     if ((type === 'suggested' && count === 7) || (type === 'promoted' && count === 9)) {
         DEV_LOGS && console.log("Unwanted Post Detected")
-        element.remove();
+        element?.remove();
         return;
     }
     else {
-        deleteUnwantedSpans(type, element.parentNode, count + 1);
+        deleteUnwantedSpans(type, element?.parentNode as HTMLElement, count + 1);
     }
 }
 
-function findUnwantedSpans() {
+export function findUnwantedSpans() {
     const suggestedSpans = Array.from(document.getElementsByTagName("span"))
         .filter((span) => {
             if (span.innerHTML.includes("Suggested")) {
@@ -29,22 +29,25 @@ function findUnwantedSpans() {
         });
 
     suggestedSpans.forEach((s) => {
-        deleteUnwantedSpans('suggested',s, 0);
+        deleteUnwantedSpans('suggested', s, 0);
     })
 
     promotedSpans.forEach((s) => {
-        deleteUnwantedSpans('promoted',s, 0);
+        deleteUnwantedSpans('promoted', s, 0);
     })
 }
 
-let observer = new MutationObserver(() => {
-    DEV_LOGS && console.log("mutation occurred");
-    if (window.location.href.includes('feed')) findUnwantedSpans();
-});
+export function initPurger() {
+    const observer = new MutationObserver(() => {
+        DEV_LOGS && console.log("mutation occurred");
+        if (window.location.href.includes('feed')) findUnwantedSpans();
+    });
 
-observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true });
 
-window.onload = function () {
-    DEV_LOGS && console.log("Hello Friend");
-    findUnwantedSpans(); // Initial execution
-};
+    window.onload = function () {
+        DEV_LOGS && console.log("Hello Friend");
+        findUnwantedSpans(); // Initial execution
+    };
+}
+

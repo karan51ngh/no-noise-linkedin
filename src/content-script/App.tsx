@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
+import { initPurger } from '../../content-script';
+
 
 export default function App() {
 
   useEffect(() => {
     console.log("No-Noise-LinkedIn: React is injected and running");
+    initPurger();
   }, []);
 
   return (
