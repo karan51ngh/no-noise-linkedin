@@ -5,9 +5,6 @@ type ControlPanelProps = {
 }
 
 export default function ControlPanel(props: ControlPanelProps) {
-    const [name, setName] = useState('');
-    const [subscribe, setSubscribe] = useState(false);
-    console.log(props)
     return (
         <div
             style={{
@@ -42,10 +39,10 @@ export default function ControlPanel(props: ControlPanelProps) {
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
-                    console.log('Sample form submit', { name, subscribe });
+                    console.log('Sample form submit');
                 }}
             >
-                <div style={{ marginBottom: 8 }}>
+                {/* <div style={{ marginBottom: 8 }}>
                     <label htmlFor="nnl-name" style={{ display: 'block', marginBottom: 4 }}>Name</label>
                     <input
                         id="nnl-name"
@@ -61,19 +58,42 @@ export default function ControlPanel(props: ControlPanelProps) {
                             borderRadius: 4
                         }}
                     />
+                </div> */}
+
+                <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input
+                        id="nnl-promoted"
+                        type="checkbox"
+                    />
+                    <label htmlFor="nnl-subscribe">Disable Promoted Posts</label>
                 </div>
 
                 <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <input
-                        id="nnl-subscribe"
+                        id="nnl-suggested"
                         type="checkbox"
-                        checked={subscribe}
-                        onChange={(e) => setSubscribe(e.target.checked)}
                     />
-                    <label htmlFor="nnl-subscribe">Enable sample option</label>
+                    <label htmlFor="nnl-subscribe">Disable Suggested Posts</label>
                 </div>
 
-                <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input
+                        id="nnl-news"
+                        type="checkbox"
+                        title='Disable LinkedIn News Section'
+                    />
+                    <label htmlFor="nnl-subscribe">Disable LinkedIn News Section</label>
+                </div>
+
+                <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input
+                        id="nnl-news"
+                        type="checkbox"
+                    />
+                    <label htmlFor="nnl-feed">Disable LinkedIn Feed</label>
+                </div>
+
+                {/* <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
                     <button
                         type="button"
                         onClick={props.closePanel}
@@ -87,7 +107,7 @@ export default function ControlPanel(props: ControlPanelProps) {
                     >
                         Submit
                     </button>
-                </div>
+                </div> */}
             </form>
         </div>
 

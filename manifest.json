@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "NoNoise LinkedIn",
-    "description": "NoNoise LinkedIn is a Free and Open Source extension that cleans up your LinkedIn feed by removing Suggested and Promoted posts.",
+    "name": "No Noise LinkedIn",
+    "description": "No Noise LinkedIn is a Free and Open Source extension that cleans up your LinkedIn feed by removing Suggested and Promoted posts.",
     "version": "2.0.0",
     "action": { "default_popup": "index.html" },
     "permissions": ["storage", "activeTab"],
@@ -14,6 +14,12 @@
         "48": "images/icon-48.png",
         "128": "images/icon-128.png"
     },
+    "web_accessible_resources": [
+      {
+        "resources": ["images/*.png"],
+        "matches": ["https://www.linkedin.com/*"]
+      }
+    ],
     "content_scripts": [
     {
       "js": ["src/content-script/index.tsx"],
