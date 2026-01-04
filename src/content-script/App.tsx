@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { initPurger } from '../../content-script';
 import ControlPanel from './ControlPanel'
-const icon48 = chrome.runtime.getURL('images/icon-48.png');
+const icon32 = chrome.runtime.getURL('images/icon-32.png');
 
 
 export default function App() {
@@ -17,7 +17,8 @@ export default function App() {
 
     const onChange = () => {
       const current = location.href;
-      if (getFirstPathSegment(current) !== getFirstPathSegment(prev)) {
+      if (getFirstPathSegment(current) !== getFirstPathSegment(prev)
+        && getFirstPathSegment(current) == 'feed') {
         console.log("No-Noise-LinkedIn: URL changed", { from: prev, to: current });
         reloadExtension();
         prev = current;
@@ -70,11 +71,11 @@ export default function App() {
           title='No Noise LinkedIn Control panel'
           style={{ background: 'transparent', border: 'none', padding: 0, margin: 0, lineHeight: 0, boxShadow: 'none', cursor: 'pointer', display: 'inline-block' }}
         >
-          <img src={icon48} alt="No Noise LinkedIn Control panel" width={48} height={48} style={{ display: 'block' }} />
+          <img src={icon32} alt="No Noise LinkedIn Control panel" width={32} height={32} style={{ display: 'block' }} />
         </button>
       </div>
       {showPanel && (
-        <ControlPanel closePanel={() => { setShowPanel(false) }} />
+        <ControlPanel closePanel={() => { setShowPanel(false) }} hardRefresh={reloadExtension} />
       )}
     </div>
   );

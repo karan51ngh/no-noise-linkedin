@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { X } from 'lucide-react';
 
 type ControlPanelProps = {
     closePanel: () => void
+    hardRefresh: () => void
 }
 
 export default function ControlPanel(props: ControlPanelProps) {
@@ -9,8 +11,8 @@ export default function ControlPanel(props: ControlPanelProps) {
         <div
             style={{
                 position: 'fixed',
-                bottom: 60,
-                left: 20,
+                bottom: 76,
+                left: 32,
                 width: 260,
                 background: 'white',
                 color: '#111',
@@ -25,14 +27,21 @@ export default function ControlPanel(props: ControlPanelProps) {
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                <strong style={{ fontSize: 14 }}>Control Panel</strong>
+                <strong style={{ fontSize: 14 }}>No Noise LinkedIn Control panel</strong>
                 <button
                     type="button"
                     onClick={props.closePanel}
                     aria-label="Close panel"
-                    style={{ border: 'none', background: 'transparent', fontSize: 18, lineHeight: 1, cursor: 'pointer' }}
+                    style={{
+                        border: 'none',
+                        background: 'transparent',
+                        cursor: 'pointer',
+                        display: 'flex',       // Helps center the icon vertically/horizontally
+                        alignItems: 'center',
+                        padding: 0             // Resets default button padding
+                    }}
                 >
-                    ×
+                    <X size={18} />
                 </button>
             </div>
 
@@ -42,23 +51,6 @@ export default function ControlPanel(props: ControlPanelProps) {
                     console.log('Sample form submit');
                 }}
             >
-                {/* <div style={{ marginBottom: 8 }}>
-                    <label htmlFor="nnl-name" style={{ display: 'block', marginBottom: 4 }}>Name</label>
-                    <input
-                        id="nnl-name"
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Type your name"
-                        style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '6px 8px',
-                            border: '1px solid #ccc',
-                            borderRadius: 4
-                        }}
-                    />
-                </div> */}
 
                 <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <input
@@ -93,21 +85,18 @@ export default function ControlPanel(props: ControlPanelProps) {
                     <label htmlFor="nnl-feed">Disable LinkedIn Feed</label>
                 </div>
 
-                {/* <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
                     <button
                         type="button"
-                        onClick={props.closePanel}
+                        onClick={() => {
+                            props.hardRefresh()
+                            props.closePanel()
+                        }}
                         style={{ padding: '6px 10px', borderRadius: 4, border: '1px solid #ddd', background: '#f3f4f6', cursor: 'pointer' }}
                     >
-                        Cancel
+                        Hard Reload.
                     </button>
-                    <button
-                        type="submit"
-                        style={{ padding: '6px 10px', borderRadius: 4, border: '1px solid #2563eb', background: '#3b82f6', color: 'white', cursor: 'pointer' }}
-                    >
-                        Submit
-                    </button>
-                </div> */}
+                </div>
             </form>
         </div>
 
