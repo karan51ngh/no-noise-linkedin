@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Github, Linkedin, Twitter } from 'lucide-react';
 
 type ControlPanelProps = {
     closePanel: () => void
@@ -27,7 +27,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                <strong style={{ fontSize: 14 }}>No Noise LinkedIn Control panel</strong>
+                <strong style={{ fontSize: 18 }}>No Noise LinkedIn - Control Panel</strong>
                 <button
                     type="button"
                     onClick={props.closePanel}
@@ -36,9 +36,9 @@ export default function ControlPanel(props: ControlPanelProps) {
                         border: 'none',
                         background: 'transparent',
                         cursor: 'pointer',
-                        display: 'flex',       // Helps center the icon vertically/horizontally
+                        display: 'flex',
                         alignItems: 'center',
-                        padding: 0             // Resets default button padding
+                        padding: 0
                     }}
                 >
                     <X size={18} />
@@ -85,7 +85,7 @@ export default function ControlPanel(props: ControlPanelProps) {
                     <label htmlFor="nnl-feed">Disable LinkedIn Feed</label>
                 </div>
 
-                <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 10, borderTop: '1px solid #eee', paddingTop: 10 }}>
                     <button
                         type="button"
                         onClick={() => {
@@ -98,6 +98,38 @@ export default function ControlPanel(props: ControlPanelProps) {
                     </button>
                 </div>
             </form>
+
+            <div style={{
+                marginTop: 10, borderTop: '1px solid #eee', paddingTop: 10, display: 'flex', flexDirection: 'row', gap: 8,
+                alignItems: 'center',
+                justifyContent : 'center',
+                padding: '8px 10px', border: '1px solid #eee', borderRadius: 6, textDecoration: 'none', color: '#111', backgroundColor: 'black'
+            }}>
+                <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'flex', alignItems: 'center', color: 'white' }}
+                >
+                    <Github size={28} />
+                </a>
+                <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'flex', alignItems: 'center', color: 'white' }}
+                >
+                    <Linkedin size={28} />
+                </a>
+                <a
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: 'flex', alignItems: 'center', color: 'white' }}
+                >
+                    <Twitter size={28} />
+                </a>
+            </div>
         </div>
 
     )

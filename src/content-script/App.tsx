@@ -18,8 +18,8 @@ export default function App() {
     const onChange = () => {
       const current = location.href;
       if (getFirstPathSegment(current) !== getFirstPathSegment(prev)
-        && getFirstPathSegment(current) == 'feed') {
-        console.log("No-Noise-LinkedIn: URL changed", { from: prev, to: current });
+        && (getFirstPathSegment(prev) == 'mynetwork')) {
+        // console.log("No-Noise-LinkedIn: URL changed", { from: prev, to: current });
         reloadExtension();
         prev = current;
       }
