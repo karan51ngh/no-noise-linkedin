@@ -1,9 +1,29 @@
+import { type Settings } from "./src/content-script/constants";
+
 const DEV_LOGS = false;
 
-export  function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: number) {
+const promotedPosts: (HTMLElement | null)[] = [];
+const suggestedPosts: (HTMLElement | null)[] = [];
+
+function toggleHidePromoted(toggle : boolean) {
+    promotedPosts.forEach((pp) => {
+        pp?.remove();
+    })
+}
+
+function toggleHideSuggested(toggle : boolean) {
+    suggestedPosts.forEach((sp) => {
+        sp?.remove();
+    })
+}
+
+function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: number) {
     if ((type === 'suggested' && count === 7) || (type === 'promoted' && count === 9)) {
         DEV_LOGS && console.log("Unwanted Post Detected")
-        element?.remove();
+        
+        type === 'suggested'
+            ? suggestedPosts.push(element)
+            : promotedPosts.push(element)
         return;
     }
     else {
@@ -11,7 +31,7 @@ export  function deleteUnwantedSpans(type: string, element: HTMLElement | null, 
     }
 }
 
-export function findUnwantedSpans() {
+function findUnwantedSpans(userSettings: Settings) {
     const suggestedSpans = Array.from(document.getElementsByTagName("span"))
         .filter((span) => {
             if (span.innerHTML.includes("Suggested")) {
@@ -30,24 +50,31 @@ export function findUnwantedSpans() {
 
     suggestedSpans.forEach((s) => {
         deleteUnwantedSpans('suggested', s, 0);
+        toggleHideSuggested(userSettings.disableSuggested);
+
     })
 
     promotedSpans.forEach((s) => {
         deleteUnwantedSpans('promoted', s, 0);
+        toggleHidePromoted(userSettings.disablePromoted);
+
     })
 }
 
-export function initPurger() {
+export function initPurger(userSettings: Settings) {
+
+    console.log("initPurger !!")
+
     const observer = new MutationObserver(() => {
         DEV_LOGS && console.log("mutation occurred");
-        if (window.location.href.includes('feed')) findUnwantedSpans();
+        if (window.location.href.includes('feed')) findUnwantedSpans(userSettings);
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
 
     window.onload = function () {
         DEV_LOGS && console.log("Hello Friend");
-        findUnwantedSpans(); // Initial execution
+        findUnwantedSpans(userSettings); // Initial execution
     };
 }
 

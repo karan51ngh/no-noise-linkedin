@@ -15,14 +15,14 @@ async function setPartial(area: StorageArea, partial: Partial<Settings>): Promis
   });
 }
 
-export function useSettings(options?: { area?: StorageArea; defaults?: Settings }) {
-  const area: StorageArea = options?.area ?? 'sync';
-  const defaults: Settings = options?.defaults ?? DEFAULTS;
+export function useSettings() {
+  const area: StorageArea = 'sync';
+  const defaults: Settings = DEFAULTS;
 
-  const [settings, setSettings] = useState<Settings>(defaults);
+  const [, setSettings] = useState<Settings>(defaults);
 
   useEffect(() => {
-    getAll(area, defaults).then(setSettings);
+    getAll(area, defaults).then((data) => setSettings(data));
 
     const onChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: chrome.storage.AreaName) => {
       if (areaName !== area) return;
@@ -57,20 +57,5 @@ export function useSettings(options?: { area?: StorageArea; defaults?: Settings 
     await setPartial(area, { [key]: value });
   }, [area]);
 
-  return { settings, save, setSetting, area, defaults };
-}
-
-export async function logAllChromeStorage(): Promise<void> {
-  const getAllArea = (area: StorageArea) =>
-    new Promise<any>((resolve) => {
-      chrome.storage[area].get(null, (items: any) => resolve(items));
-    });
-
-  const [localData, syncData] = await Promise.all([
-    getAllArea('local'),
-    getAllArea('sync'),
-  ]);
-
-  console.log('No-Noise-LinkedIn: chrome.storage.local ->', localData);
-  console.log('No-Noise-LinkedIn: chrome.storage.sync ->', syncData);
+  return { setSetting, area, getAll };
 }

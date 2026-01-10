@@ -1,26 +1,26 @@
 import { useEffect, useState } from 'react';
 import { initPurger } from '../../content-script';
 import ControlPanel from './ControlPanel'
-// import { logAllChromeStorage } from './useSettings'
+import { useSettings } from './useSettings';
+import { DEFAULTS, type Settings } from './constants';
+
 const icon32 = chrome.runtime.getURL('images/icon-32.png');
 
 
 export default function App() {
   const [showPanel, setShowPanel] = useState(false);
+  const { area, getAll } = useSettings();
+  const [userSettings, setUserSettings] = useState<Settings>(DEFAULTS);
 
   useEffect(() => {
-    console.log("No-Noise-LinkedIn: React is injected and running");
-    initPurger();
-  }, []);
+    updateUserSettings();
 
-  useEffect(() => {
     let prev = location.href;
 
     const onChange = () => {
       const current = location.href;
       if (getFirstPathSegment(current) !== getFirstPathSegment(prev)
         && (getFirstPathSegment(prev) == 'mynetwork' || getFirstPathSegment(prev) == 'jobs')) {
-        // console.log("No-Noise-LinkedIn: URL changed", { from: prev, to: current });
         reloadExtension();
         prev = current;
       }
@@ -30,12 +30,34 @@ export default function App() {
     window.addEventListener('popstate', onChange);
     window.addEventListener('hashchange', onChange);
 
+
+    const onStorageChanged = () => {
+      updateUserSettings();
+    };
+
+    try {
+      chrome?.storage?.onChanged?.addListener(onStorageChanged);
+    } catch (e) {
+      console.log("Chrome API is unavailable")
+    }
+
     return () => {
       window.clearInterval(intervalId);
       window.removeEventListener('popstate', onChange);
       window.removeEventListener('hashchange', onChange);
+
+      try {
+        chrome?.storage?.onChanged?.removeListener(onStorageChanged);
+      } catch {
+        console.log("Chrome API is unavailable")
+      }
+
     };
   }, []);
+
+  useEffect(() => {
+    initPurger(userSettings);
+  }, [JSON.stringify(userSettings)]);
 
   function getFirstPathSegment(urlString: string): string | null {
     try {
@@ -60,6 +82,13 @@ export default function App() {
     }
   };
 
+  const updateUserSettings = () => {
+    getAll(area, DEFAULTS)
+      .then((data) => {
+        setUserSettings(data)
+      })
+  }
+
   return (
     <div
       style={{ position: 'fixed', bottom: 32, left: 32, zIndex: 2147483647, pointerEvents: 'auto' }}
@@ -76,7 +105,7 @@ export default function App() {
         </button>
       </div>
       {showPanel && (
-        <ControlPanel closePanel={() => { setShowPanel(false) }} hardRefresh={reloadExtension} />
+        <ControlPanel closePanel={() => { setShowPanel(false) }} hardRefresh={reloadExtension} userSettings={userSettings} />
       )}
     </div>
   );

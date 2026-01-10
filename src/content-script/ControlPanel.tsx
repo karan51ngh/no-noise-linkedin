@@ -6,10 +6,12 @@ import type { Settings } from './constants';
 type ControlPanelProps = {
   closePanel: () => void;
   hardRefresh: () => void;
+  userSettings: Settings;
 };
 
 export default function ControlPanel(props: ControlPanelProps) {
-  const { settings, setSetting } = useSettings();
+
+  const { setSetting } = useSettings();
 
   const toggle =
     (key: keyof Settings) => async (e: ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +67,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             id="nnl-promoted"
             name="nnl-promoted"
             type="checkbox"
-            checked={settings.disablePromoted}
+            checked={props.userSettings.disablePromoted}
             onChange={toggle('disablePromoted')}
           />
           <label htmlFor="nnl-promoted">Disable Promoted Posts</label>
@@ -76,7 +78,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             id="nnl-suggested"
             name="nnl-suggested"
             type="checkbox"
-            checked={settings.disableSuggested}
+            checked={props.userSettings.disableSuggested}
             onChange={toggle('disableSuggested')}
           />
           <label htmlFor="nnl-suggested">Disable Suggested Posts</label>
@@ -88,7 +90,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             name="nnl-news"
             type="checkbox"
             title="Disable LinkedIn News Section"
-            checked={settings.disableNews}
+            checked={props.userSettings.disableNews}
             onChange={toggle('disableNews')}
           />
           <label htmlFor="nnl-news">Disable LinkedIn News Section</label>
@@ -99,7 +101,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             id="nnl-feed"
             name="nnl-feed"
             type="checkbox"
-            checked={settings.disableFeed}
+            checked={props.userSettings.disableFeed}
             onChange={toggle('disableFeed')}
           />
           <label htmlFor="nnl-feed">Disable LinkedIn Feed</label>
