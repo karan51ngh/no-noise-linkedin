@@ -36,19 +36,16 @@ function toggleHideNewsFeed(toggle: boolean) {
         (document.getElementById('feed-news-module') as HTMLElement | null) ||
         (document.querySelector('.news-module--with-game') as HTMLElement | null);
 
-    const stickyContent =
-        (document.querySelector('div:has(> section.ad-banner-container)') as HTMLElement | null) ||
-        (document.querySelector('section.ad-banner-container')?.closest('div') as HTMLElement | null) ||
-        (document.querySelector('.scaffold-layout__sticky-content') as HTMLElement | null);
+    const newsAside =
+        (document.querySelector('aside.scaffold-layout__aside[aria-label="LinkedIn News"]') as HTMLElement | null) ||
+        (document.querySelector('aside[aria-label="LinkedIn News"]') as HTMLElement | null);
 
-
-    if (!newsModule) return;
     if (toggle) {
-        newsModule.style.setProperty('display', 'none', 'important');
-        stickyContent?.style.setProperty('display', 'none', 'important');
+        newsModule?.style.setProperty('display', 'none', 'important');
+        newsAside?.style.setProperty('display', 'none', 'important');
     } else {
-        newsModule.style.removeProperty('display');
-        stickyContent?.style.removeProperty('display');
+        newsModule?.style.removeProperty('display');
+        newsAside?.style.removeProperty('display');
     }
 }
 
@@ -58,12 +55,24 @@ function toggleHideMainFeed(toggle: boolean) {
         (document.querySelector('[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
         (document.querySelector('.scaffold-finite-scroll__content') as HTMLElement | null);
 
-    if (!mainFeed) return;
+    const mainFeedSortButton =
+        (document.querySelector('button.artdeco-dropdown__trigger:has(> hr.feed-index-sort-border)') as HTMLElement | null) ||
+        (document.querySelector('hr.feed-index-sort-border')?.closest('button') as HTMLElement | null) ||
+        (document.querySelector('button.artdeco-dropdown__trigger.full-width[aria-expanded][type="button"]') as HTMLElement | null);
+
+    const loadMoreButton =
+        (document.querySelector('button.scaffold-finite-scroll__load-button') as HTMLElement | null) ||
+        (document.querySelector('button.artdeco-button.scaffold-finite-scroll__load-button') as HTMLElement | null) ||
+        (document.getElementById('ember322') as HTMLElement | null);
 
     if (toggle) {
-        mainFeed.style.setProperty('display', 'none', 'important');
+        mainFeed?.style.setProperty('display', 'none', 'important');
+        mainFeedSortButton?.style.setProperty('display', 'none', 'important');
+        loadMoreButton?.style.setProperty('display', 'none', 'important');
     } else {
-        mainFeed.style.removeProperty('display');
+        mainFeed?.style.removeProperty('display');
+        mainFeedSortButton?.style.removeProperty('display');
+        loadMoreButton?.style.removeProperty('display');
     }
 }
 
@@ -113,13 +122,9 @@ function findUnwantedSpans(userSettings: Settings) {
 
 export function initPurger(userSettings: Settings) {
 
-    console.log("initPurger !!")
-
     toggleHideMainFeed(userSettings.disableFeed);
     toggleHideNewsFeed(userSettings.disableNews);
     findUnwantedSpans(userSettings);
-
-    console.log("toggleHideNewsFeed() triggered")
 
     const observer = new MutationObserver(() => {
         DEV_LOGS && console.log("mutation occurred");
