@@ -7,14 +7,36 @@ const suggestedPosts: (HTMLElement | null)[] = [];
 
 function toggleHidePromoted(toggle : boolean) {
     promotedPosts.forEach((pp) => {
-        pp?.remove();
+        if (!pp) return;
+        if (toggle) {
+            // Hide the element
+            pp.style.setProperty('display', 'none', 'important');
+        } else {
+            // Unhide (restore original display)
+            pp.style.removeProperty('display');
+        }
     })
 }
 
 function toggleHideSuggested(toggle : boolean) {
     suggestedPosts.forEach((sp) => {
-        sp?.remove();
+        if (!sp) return;
+        if (toggle) {
+            // Hide the element
+            sp.style.setProperty('display', 'none', 'important');
+        } else {
+            // Unhide (restore original display)
+            sp.style.removeProperty('display');
+        }
     })
+}
+
+function toggleHideNewsFeed(toggle : boolean) {
+    
+}
+
+function toggleHideMainFeed(toggle : boolean) {
+    
 }
 
 function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: number) {
@@ -50,15 +72,17 @@ function findUnwantedSpans(userSettings: Settings) {
 
     suggestedSpans.forEach((s) => {
         deleteUnwantedSpans('suggested', s, 0);
-        toggleHideSuggested(userSettings.disableSuggested);
-
     })
+    toggleHideSuggested(userSettings.disableSuggested);
 
     promotedSpans.forEach((s) => {
         deleteUnwantedSpans('promoted', s, 0);
-        toggleHidePromoted(userSettings.disablePromoted);
-
     })
+    toggleHidePromoted(userSettings.disablePromoted);
+
+    toggleHideMainFeed(userSettings.disableFeed);
+    toggleHideNewsFeed(userSettings.disableNews);
+
 }
 
 export function initPurger(userSettings: Settings) {
