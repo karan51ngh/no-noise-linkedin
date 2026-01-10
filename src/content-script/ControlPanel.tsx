@@ -2,6 +2,7 @@ import type { ChangeEvent } from 'react';
 import { X, Github, Linkedin, Twitter } from 'lucide-react';
 import { useSettings } from './useSettings';
 import type { Settings } from './constants';
+import './control-panel.css';
 
 type ControlPanelProps = {
   closePanel: () => void;
@@ -10,7 +11,6 @@ type ControlPanelProps = {
 };
 
 export default function ControlPanel(props: ControlPanelProps) {
-
   const { setSetting } = useSettings();
 
   const toggle =
@@ -20,139 +20,144 @@ export default function ControlPanel(props: ControlPanelProps) {
 
   return (
     <div
+      className="nnl-cp"
       style={{
         position: 'fixed',
         bottom: 76,
         left: 32,
-        width: 260,
-        background: 'white',
-        color: '#111',
-        border: '1px solid rgba(0,0,0,0.1)',
-        borderRadius: 8,
-        boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+        width: 280,
+        background: 'rgba(255,255,255,0.75)',
+        color: '#1d1d1f',
+        border: '1px solid rgba(0,0,0,0.08)',
+        borderRadius: 20,
+        boxShadow:
+          '0 20px 40px rgba(0,0,0,0.20), inset 0 0.5px 0 rgba(255,255,255,0.8)',
         padding: 12,
         zIndex: 2147483647,
         pointerEvents: 'auto',
-        fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
-        fontSize: 14
+        fontFamily:
+          '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
+        WebkitFontSmoothing: 'antialiased',
+        MozOsxFontSmoothing: 'grayscale',
+        letterSpacing: '-0.01em',
+        lineHeight: 1.35,
+        fontSize: 13,
+        backdropFilter: 'saturate(180%) blur(20px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(20px)',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-        <strong style={{ fontSize: 18 }}>No Noise LinkedIn - Control Panel</strong>
+
+      <div className="nnl-cp-header">
+        <div className="nnl-cp-title">
+          <span className="brand">No Noise LinkedIn</span>
+          <span className="panel">Control Panel</span>
+        </div>
         <button
           type="button"
           onClick={props.closePanel}
+          className="nnl-cp-close"
           aria-label="Close panel"
-          style={{
-            border: 'none',
-            background: 'transparent',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            padding: 0
-          }}
+          title="Close"
         >
-          <X size={18} />
+          <X size={14} strokeWidth={2.5} />
         </button>
       </div>
 
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log('Sample form submit');
         }}
       >
-        <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <input
-            id="nnl-promoted"
-            name="nnl-promoted"
-            type="checkbox"
-            checked={props.userSettings.disablePromoted}
-            onChange={toggle('disablePromoted')}
-          />
-          <label htmlFor="nnl-promoted">Disable Promoted Posts</label>
+        <div className="nnl-cp-section">
+          <label className="nnl-cp-row">
+            <span className="nnl-cp-label">Disable Promoted Posts</span>
+            <input
+              id="nnl-promoted"
+              name="nnl-promoted"
+              type="checkbox"
+              checked={props.userSettings.disablePromoted}
+              onChange={toggle('disablePromoted')}
+            />
+            <span className="nnl-cp-switch" aria-hidden="true">
+              <span className="nnl-cp-knob" />
+            </span>
+          </label>
+
+          <label className="nnl-cp-row">
+            <span className="nnl-cp-label">Disable Suggested Posts</span>
+            <input
+              id="nnl-suggested"
+              name="nnl-suggested"
+              type="checkbox"
+              checked={props.userSettings.disableSuggested}
+              onChange={toggle('disableSuggested')}
+            />
+            <span className="nnl-cp-switch" aria-hidden="true">
+              <span className="nnl-cp-knob" />
+            </span>
+          </label>
+
+          <label className="nnl-cp-row" title="Disable LinkedIn News Section">
+            <span className="nnl-cp-label">Disable LinkedIn News Section</span>
+            <input
+              id="nnl-news"
+              name="nnl-news"
+              type="checkbox"
+              checked={props.userSettings.disableNews}
+              onChange={toggle('disableNews')}
+            />
+            <span className="nnl-cp-switch" aria-hidden="true">
+              <span className="nnl-cp-knob" />
+            </span>
+          </label>
+
+          <label className="nnl-cp-row">
+            <span className="nnl-cp-label">Disable LinkedIn Feed</span>
+            <input
+              id="nnl-feed"
+              name="nnl-feed"
+              type="checkbox"
+              checked={props.userSettings.disableFeed}
+              onChange={toggle('disableFeed')}
+            />
+            <span className="nnl-cp-switch" aria-hidden="true">
+              <span className="nnl-cp-knob" />
+            </span>
+          </label>
         </div>
 
-        <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <input
-            id="nnl-suggested"
-            name="nnl-suggested"
-            type="checkbox"
-            checked={props.userSettings.disableSuggested}
-            onChange={toggle('disableSuggested')}
-          />
-          <label htmlFor="nnl-suggested">Disable Suggested Posts</label>
-        </div>
-
-        <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <input
-            id="nnl-news"
-            name="nnl-news"
-            type="checkbox"
-            title="Disable LinkedIn News Section"
-            checked={props.userSettings.disableNews}
-            onChange={toggle('disableNews')}
-          />
-          <label htmlFor="nnl-news">Disable LinkedIn News Section</label>
-        </div>
-
-        <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <input
-            id="nnl-feed"
-            name="nnl-feed"
-            type="checkbox"
-            checked={props.userSettings.disableFeed}
-            onChange={toggle('disableFeed')}
-          />
-          <label htmlFor="nnl-feed">Disable LinkedIn Feed</label>
-        </div>
-
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 10, borderTop: '1px solid #eee', paddingTop: 10 }}>
+        <div className="nnl-cp-actions nnl-cp-section" style={{ paddingTop: 8 }}>
           <button
             type="button"
             onClick={() => {
-              props.hardRefresh()
-              props.closePanel()
+              props.hardRefresh();
+              props.closePanel();
             }}
-            style={{ padding: '6px 10px', borderRadius: 4, border: '1px solid #ddd', background: '#f3f4f6', cursor: 'pointer' }}
+            className="nnl-cp-button"
           >
-            Hard Reload.
+            Reload
           </button>
         </div>
       </form>
 
-      <div style={{
-        marginTop: 10, borderTop: '1px solid #eee', paddingTop: 10, display: 'flex', flexDirection: 'row', gap: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '8px 10px', border: '1px solid #eee', borderRadius: 6, textDecoration: 'none', color: '#111', backgroundColor: 'black'
-      }}>
-        <a
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ display: 'flex', alignItems: 'center', color: 'white' }}
-        >
-          <Github size={28} />
-        </a>
-        <a
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ display: 'flex', alignItems: 'center', color: 'white' }}
-        >
-          <Linkedin size={28} />
-        </a>
-        <a
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ display: 'flex', alignItems: 'center', color: 'white' }}
-        >
-          <Twitter size={28} />
-        </a>
+      <div className="nnl-cp-social">
+        {[
+          { Icon: Github, href: 'https://github.com/karan51ngh' },
+          { Icon: Linkedin, href: '#' },
+          { Icon: Twitter, href: 'https://twitter.com/karan5ingh' },
+        ].map(({ Icon, href }, i) => (
+          <a
+            key={i}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open ${Icon.displayName || 'social'} link`}
+            title="Open link"
+          >
+            <Icon size={20} strokeWidth={2} />
+          </a>
+        ))}
       </div>
     </div>
-
-  )
+  );
 }

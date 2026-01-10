@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import controlPanelCss from './control-panel.css?raw';
 
 const HOST_ID = 'no-noise-linkedin-root';
 
@@ -16,6 +17,9 @@ function mountApp() {
   }
 
   const shadow = (host.shadowRoot as ShadowRoot) || host.attachShadow({ mode: 'open' });
+  const styleEl = document.createElement('style');
+  styleEl.textContent = controlPanelCss;
+  shadow.append(styleEl);
   const root = createRoot(shadow);
 
   root.render(

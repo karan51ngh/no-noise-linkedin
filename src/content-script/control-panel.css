@@ -1,0 +1,187 @@
+/* Control Panel styles extracted from ControlPanel.tsx inline <style> block */
+.nnl-cp {
+  --nnl-accent: #0076DF;
+  --nnl-muted: #6b6b70;
+  --nnl-sep: rgba(60,60,67,0.12);
+  --nnl-surface: rgba(255,255,255,0.75);
+}
+
+.nnl-cp .nnl-cp-header {
+  position: relative;
+  margin-bottom: 6px;
+  padding: 2px 28px 8px 28px;
+  text-align: center;
+}
+
+.nnl-cp .nnl-cp-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 1.15;
+}
+
+.nnl-cp .nnl-cp-title .brand {
+  font-size: 13px;
+  color: var(--nnl-muted);
+  font-weight: 500;
+}
+
+.nnl-cp .nnl-cp-title .panel {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: -0.015em;
+}
+
+.nnl-cp .nnl-cp-close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  border: none;
+  background: transparent;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #1d1d1f;
+  transition: background-color .2s ease, color .2s ease;
+}
+.nnl-cp .nnl-cp-close:hover {
+  background: rgba(60,60,67,0.12);
+}
+.nnl-cp .nnl-cp-close:active {
+  background: rgba(60,60,67,0.18);
+}
+
+.nnl-cp .nnl-cp-section {
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 0.5px solid var(--nnl-sep);
+}
+
+.nnl-cp .nnl-cp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 4px;
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: 10px;
+  transition: background-color .2s ease;
+}
+.nnl-cp .nnl-cp-row:hover {
+  background: rgba(120,120,128,0.08);
+}
+
+.nnl-cp .nnl-cp-label {
+  color: #1d1d1f;
+  font-weight: 500;
+}
+
+/* macOS switch */
+.nnl-cp .nnl-cp-row input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.nnl-cp .nnl-cp-switch {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(120,120,128,0.16);
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.5),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+  flex: 0 0 46px;
+}
+
+.nnl-cp .nnl-cp-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.15),
+    0 0 0 0.5px rgba(0,0,0,0.04),
+    inset 0 0.5px 0 rgba(255,255,255,0.9);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.nnl-cp .nnl-cp-row input[type="checkbox"]:checked + .nnl-cp-switch {
+  background: var(--nnl-accent);
+  border-color: rgba(10,132,255,0.8);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.4),
+    0 0 0 0 rgba(10,132,255,0.0);
+}
+
+.nnl-cp .nnl-cp-row input[type="checkbox"]:checked + .nnl-cp-switch .nnl-cp-knob {
+  transform: translateX(20px);
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.20),
+    0 0 0 0.5px rgba(0,0,0,0.05),
+    inset 0 0.5px 0 rgba(255,255,255,0.9);
+}
+
+.nnl-cp .nnl-cp-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.nnl-cp .nnl-cp-button {
+  padding: 6px 12px;
+  border-radius: 22px;
+  border: 1px solid var(--nnl-accent);
+  background: transparent;
+  color: var(--nnl-accent);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
+}
+.nnl-cp .nnl-cp-button:hover {
+  background: var(--nnl-accent);
+  color: var(--nnl-surface);
+}
+.nnl-cp .nnl-cp-button:active {
+  background: rgba(10,132,255,0.12);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
+  border-color: var(--nnl-accent);
+  color: var(--nnl-accent);
+}
+
+.nnl-cp .nnl-cp-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(10,132,255,0.3);
+}
+
+.nnl-cp .nnl-cp-social {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.nnl-cp .nnl-cp-social a {
+  color: #8e8e93;
+  display: flex;
+  align-items: center;
+  transition: color .2s ease, transform .2s ease;
+}
+.nnl-cp .nnl-cp-social a:hover {
+  color: #1d1d1f;
+  transform: translateY(-0.5px);
+}
