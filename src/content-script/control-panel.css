@@ -3,7 +3,7 @@
   --nnl-accent: #0076DF;
   --nnl-muted: #6b6b70;
   --nnl-sep: rgba(60,60,67,0.12);
-  --nnl-surface: rgba(255,255,255,0.75);
+  --nnl-surface: rgb(255, 255, 255);
 }
 
 .nnl-cp .nnl-cp-header {
@@ -22,7 +22,8 @@
 
 .nnl-cp .nnl-cp-title .brand {
   font-size: 13px;
-  color: var(--nnl-muted);
+  /* color: var(--nnl-muted); */
+  color: #1d1d1f;
   font-weight: 500;
 }
 
@@ -82,7 +83,6 @@
   font-weight: 500;
 }
 
-/* macOS switch */
 .nnl-cp .nnl-cp-row input[type="checkbox"] {
   position: absolute;
   opacity: 0;
@@ -99,7 +99,6 @@
   background: rgba(120,120,128,0.16);
   border: 1px solid rgba(0,0,0,0.12);
   box-shadow:
-    inset 0 1px 1px rgba(255,255,255,0.5),
     inset 0 -1px 0 rgba(0,0,0,0.04);
   transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
   flex: 0 0 46px;
@@ -115,8 +114,7 @@
   background: #fff;
   box-shadow:
     0 1px 2px rgba(0,0,0,0.15),
-    0 0 0 0.5px rgba(0,0,0,0.04),
-    inset 0 0.5px 0 rgba(255,255,255,0.9);
+    0 0 0 0.5px rgba(0,0,0,0.04);
   transition: transform .2s ease, box-shadow .2s ease;
 }
 
@@ -124,7 +122,6 @@
   background: var(--nnl-accent);
   border-color: rgba(10,132,255,0.8);
   box-shadow:
-    inset 0 1px 1px rgba(255,255,255,0.4),
     0 0 0 0 rgba(10,132,255,0.0);
 }
 
@@ -132,8 +129,7 @@
   transform: translateX(20px);
   box-shadow:
     0 1px 2px rgba(0,0,0,0.20),
-    0 0 0 0.5px rgba(0,0,0,0.05),
-    inset 0 0.5px 0 rgba(255,255,255,0.9);
+    0 0 0 0.5px rgba(0,0,0,0.05);
 }
 
 .nnl-cp .nnl-cp-actions {
@@ -172,7 +168,6 @@
   display: flex;
   justify-content: center;
   gap: 16px;
-  margin-top: 6px;
 }
 
 .nnl-cp .nnl-cp-social a {
@@ -184,4 +179,33 @@
 .nnl-cp .nnl-cp-social a:hover {
   color: #1d1d1f;
   transform: translateY(-0.5px);
+}
+
+.nnl-cp .nnl-cp-pill {
+  color: #1f2937;
+  transition: color .2s ease, transform .2s ease, background-color .2s ease;
+}
+.nnl-cp .nnl-cp-pill:hover {
+  color: #111827;
+  background-color: #e5e7eb;
+  transform: translateY(-0.5px);
+}
+.nnl-cp .nnl-cp-pill:active {
+  transform: translateY(0);
+}
+
+/* Helper text styles */
+.nnl-cp .nnl-cp-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nnl-cp .nnl-cp-desc {
+  color: var(--nnl-muted);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.25;
 }
