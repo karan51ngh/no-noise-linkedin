@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { initPurger } from '../../content-script';
 import ControlPanel from './ControlPanel'
+// import { logAllChromeStorage } from './useSettings'
 const icon32 = chrome.runtime.getURL('images/icon-32.png');
 
 

@@ -1,86 +1,19 @@
-import { useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { X, Github, Linkedin, Twitter } from 'lucide-react';
+import { useSettings } from './useSettings';
+import type { Settings } from './constants';
 
 type ControlPanelProps = {
   closePanel: () => void;
   hardRefresh: () => void;
 };
 
-type Settings = {
-  disablePromoted: boolean;
-  disableSuggested: boolean;
-  disableNews: boolean;
-  disableFeed: boolean;
-};
-
-const DEFAULTS: Settings = {
-  disablePromoted: false,
-  disableSuggested: false,
-  disableNews: false,
-  disableFeed: false,
-};
-
-const STORAGE_AREA: 'sync' | 'local' = 'sync';
-const storage =
-  typeof chrome !== 'undefined' && chrome.storage
-    ? STORAGE_AREA === 'sync'
-      ? chrome.storage.sync
-      : chrome.storage.local
-    : undefined;
-
-async function loadSettings(): Promise<Settings> {
-  if (!storage) return DEFAULTS;
-  return new Promise((resolve) => {
-    storage.get(DEFAULTS as unknown as Record<string, unknown>, (items) => {
-      resolve({ ...DEFAULTS, ...(items as Settings) });
-    });
-  });
-}
-
-async function saveSettings(partial: Partial<Settings>): Promise<void> {
-  if (!storage) return;
-  return new Promise((resolve) => {
-    storage.set(partial as Record<string, unknown>, () => resolve());
-  });
-}
-
 export default function ControlPanel(props: ControlPanelProps) {
-  const [settings, setSettings] = useState<Settings>(DEFAULTS);
-
-  useEffect(() => {
-
-    loadSettings().then((s) => {
-      setSettings(s);
-    });
-
-    const onChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: chrome.storage.AreaName) => {
-      if (areaName !== STORAGE_AREA) return;
-      const updated: Partial<Settings> = {};
-      for (const key of Object.keys(changes)) {
-        if (key in DEFAULTS) {
-          const change = changes[key];
-          if (change && 'newValue' in change) {
-            updated[key as keyof Settings] = change.newValue as any;
-          }
-        }
-      }
-      if (Object.keys(updated).length > 0) {
-        setSettings((prev) => ({ ...prev, ...updated }));
-      }
-    };
-
-    chrome?.storage?.onChanged?.addListener(onChanged);
-
-    return () => {
-      chrome?.storage?.onChanged?.removeListener(onChanged);
-    };
-  }, []);
+  const { settings, setSetting } = useSettings();
 
   const toggle =
-    (key: keyof Settings) => async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const next = e.target.checked;
-      setSettings((prev) => ({ ...prev, [key]: next }));
-      await saveSettings({ [key]: next });
+    (key: keyof Settings) => async (e: ChangeEvent<HTMLInputElement>) => {
+      await setSetting(key, e.target.checked);
     };
 
   return (
