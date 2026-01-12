@@ -4,7 +4,7 @@ import ControlPanel from './ControlPanel'
 import { useSettings } from './useSettings';
 import { DEFAULTS, type Settings } from './constants';
 
-const icon32 = chrome.runtime.getURL('images/no-noise-inkedIn-logo.svg');
+const icon32 = chrome.runtime.getURL('images/no-noise-linkedin-logo.svg');
 
 export function getFirstPathSegment(urlString: string): string | null {
   try {
