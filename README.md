@@ -2,6 +2,8 @@
 
 ## Remove Suggested & Promoted Posts, Hide News, Block Site-wide Ads and Focus Mode for LinkedIn
 
+![No Noise LinkedIn Logo](https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/4.png)
+
 No Noise LinkedIn is a browser extension that declutters your LinkedIn experience. Hide Suggested and Promoted posts, block the LinkedIn News and Ad modules, or enable Focus Mode to hide the entire feed and stay distraction-free.
 
 ## Features
@@ -25,6 +27,7 @@ No Noise LinkedIn is a browser extension that declutters your LinkedIn experienc
 <p align="center">
   <img src="https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/1.png" width="45%" />
   <img src="https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/2.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/5.png" width="90%" />
 </p>
 
 ## Usage
