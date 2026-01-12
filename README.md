@@ -1,85 +1,25 @@
-<!-- V2 -->
+# No Noise LinkedIn
 
-# React TypeScript Chrome Extension
+## Remove Suggested & Promoted Posts, Hide News, Block Site-wide Ads and Focus Mode for LinkedIn
 
-## Overview
-
-This project demonstrates how to build a Chrome Extension using React and TypeScript. It includes examples of a Popup and a Content Script React app, both built and bundled with Vite and crxjs.
-
-## Setup
-
-### Clone repository
-```sh
-git clone git@github.com:yosevu/react-content-script.git
-```
-
-### Install dependencies
-```sh
-yarn
-```
-
-### Development
-
-To start a development server with hot-reloading:
-
-```sh
-yarn dev
-```
-
-### Build for Production
-
-To create a production-ready build of the extension:
-
-```sh
-yarn build
-```
-
-### Load the Extension
-
-1. Navigate to [chrome://extensions/](chrome://extensions/)
-2. **Enable** "Developer mode" using the toggle switch in the top right corner.
-3. Click the **"Load unpacked"** button in the top left corner.
-4. Select the `dist` directory inside the `react-content-script` directory.
-5. Navigate to https://blank.org/ to see the Content Script React app in action.
-6. Open the extensions menu and click on **"React TypeScript Chrome Extension"** to see the Popup React app.
-
-## [Popup](https://developer.chrome.com/docs/extensions/mv3/user_interface/#popup)
-
-The popup source code is at the root directory.
-
-## [Content Script](https://developer.chrome.com/docs/extensions/mv3/content_scripts/)
-
-The content script source code is in the `content-script` directory.
-
-<img width="895" alt="Screen Shot 2022-06-18 at 10 04 04 AM" src="https://user-images.githubusercontent.com/16216104/174416528-6e5ad272-5faa-41d4-a717-c210ed4924b0.png">
-
-## Development Tips
-
-- **Live Reloading**: Use `yarn dev` to see changes immediately during development.
-- **Debugging**: Use Chrome DevTools to inspect and debug both the content script and popup.
-
-## Background
-
-This repository was originally part of [How to inject a React app into a Chrome Extension as a Content Script](https://medium.com/@yosevu/how-to-inject-a-react-app-into-a-chrome-extension-as-a-content-script-3a038f611067). 
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-
-<!-- V1 -->
-
-# NoNoise LinkedIn
-
-## Remove Suggested & Sponsored Posts from LinkedIn
-
-NoNoise LinkedIn is a browser extension that cleans up your LinkedIn feed by removing all suggested and sponsored posts, helping you stay focused on real content.
+No Noise LinkedIn is a browser extension that declutters your LinkedIn experience. Hide Suggested and Promoted posts, block the LinkedIn News and Ad modules, or enable Focus Mode to hide the entire feed and stay distraction-free.
 
 ## Features
 
-- Removes **Suggested Posts** from your LinkedIn feed.
-- Removes **Sponsored Ads** from your LinkedIn feed.
-- Lightweight and **privacy-friendly** – no tracking!
+- Removes **Suggested** Posts from your LinkedIn feed.
+- Removes **Promoted** Posts from your LinkedIn feed.
+- Block LinkedIn News and ad modules across the site.
+- **Focus Mode**: Hide the entire feed to stay distraction-free.
+- Lightweight, open source, and privacy-friendly — no tracking!
+
+### Control Panel
+- A small No Noise LinkedIn button appears in the bottom-left corner of the page. Click it to open the Control Panel.
+- Available toggles:
+  - Disable **Promoted** Posts
+  - Disable **Suggested** Posts
+  - Disable **LinkedIn Feed** (**Focus Mode**)
+  - Disable **LinkedIn News and Ads**
+- A Hard Reload button is available to quickly troubleshoot.
 
 ### Feature Demonstration
 <p align="center">
@@ -87,60 +27,90 @@ NoNoise LinkedIn is a browser extension that cleans up your LinkedIn feed by rem
   <img src="https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/2.png" width="45%" />
 </p>
 
-## How to use it
+## Usage
 
-Simply install the extension and forget it. Now, whenever you browse LinkedIn, your feed will automatically be free from **Suggested** and **Sponsored** posts.
+1. Install the extension (see Installation below).
+2. On LinkedIn, click the floating No Noise LinkedIn button (bottom-left) to open the Control Panel.
+3. Enable the toggles for the content you want to hide (Suggested, Promoted, News, or the entire Feed for Focus Mode).
+4. If needed, click Hard Reload for quick troubleshooting.
+
+**Note**: By default, all toggles are off; choose what you want to hide.
 
 ## Installation
 
-### Manual Installation (Chromium-based browsers, like Brave, Google Chrome, Microsoft Edge, Vivaldi etc.)
+### Chrome Web Store
+- All Chromium-based browsers—Brave, Google Chrome, Microsoft Edge, Vivaldi, etc. are supported.
+- Chrome Web Store: [Link](https://chromewebstore.google.com/detail/hbcjelfhlljdepmifggbmhnklhmdmldn)
+- Click Add to Chrome.
 
-1. Download the latest release from the [GitHub Releases](https://github.com/karan51ngh/no-noise-linkedin/releases).
+
+### Manual Installation (Chromium-based browsers: Brave, Google Chrome, Microsoft Edge, Vivaldi, etc.)
+
+Option A: Using the prebuilt release (recommended)
+1. Download the latest release from [GitHub Releases page](https://github.com/karan51ngh/no-noise-linkedin/releases)
 2. Extract the ZIP file.
 3. Open `chrome://extensions/` in your browser.
-4. Enable **Developer mode** (top-right corner).
-5. Click **Load unpacked** and select the extracted folder.
+4. Enable Developer mode (top-right corner).
+5. Click Load unpacked and select the dist/ folder inside the extracted release.
 
-### Chrome (via Chrome Web Store)
+Option B: Build from source locally
+1. Clone the repository:
+   - `git clone https://github.com/karan51ngh/no-noise-linkedin.git`
+   - `cd no-noise-linkedin`
+2. Install dependencies and build:
+   - `npm install`
+   - `npm run build`
+3. Open `chrome://extensions/`, enable Developer mode, click Load unpacked, and select the dist/ folder that was generated by the build.
 
-- Go to the [Chrome Web Store](https://chromewebstore.google.com/detail/hbcjelfhlljdepmifggbmhnklhmdmldn)
-- Click **Add to Chrome**.
-- Enjoy a clutter-free LinkedIn experience!
 
-### Firefox (via Add-ons Store)
+## Directory Structure
 
-- Will start implementing this after the Chrome version stabilizes.
-- **Coming Soon**.
-
-## How It Works
-
-NoNoise LinkedIn uses simple DOM manipulation to identify and remove unwanted content from your LinkedIn feed. The extension does **not** collect or store any user data.
+```
+├── src/
+│   ├── content-script/
+│   │   ├── index.tsx         # Mounts the React app into the page via Shadow DOM
+│   │   ├── App.tsx           # Hosts the floating button, settings wiring, and logic
+│   │   ├── ControlPanel.tsx  # React-based UI with toggles (Promoted, Feed, etc.)
+│   │   ├── useSettings.ts    # Utilities for reading/writing settings in chrome.storage
+│   │   └── constants.ts      # Settings types and defaults
+│   └── types/
+│       └── images.d.ts       # Type definitions for images
+├── images/                   # Extension icons (16/32/48/128)
+├── assets/                   # Project images and screenshots used in README
+├── dist/                     # Production build output (Load this as unpacked)
+├── content-script.ts         # Core filtering logic (finds Suggested/Promoted posts)
+├── index.html                # Extension popup entry (default_popup)
+├── manifest.json             # Chrome extension configuration (MV3)
+├── vite.config.ts            # Vite build configuration
+├── tailwind.config.js        # Tailwind CSS configuration
+└── tsconfig.json             # TypeScript configuration
+```
 
 ## Upcoming Features
 
-We're actively working on adding new functionalities to enhance your LinkedIn experience. Stay tuned for updates!
+AI Based Ad filtering: Remove ads posted by your network (non-Promoted)
+- What: Detect and hide advertisement-like posts from people in your network that aren’t flagged as "Promoted" by LinkedIn.
+- How: A local LLM text-classification model trained using an LLM with Few‑Shot prompting. 
+- Implementation: [Local LLM Text Classification](https://github.com/karan51ngh/LocalLLMtextClassification)
+- UX: This will ship as a new toggle in the Control Panel.
 
 ## License
 
-This project is licensed under the **GNU General Public License v3.0**. See the [LICENSE](https://github.com/karan51ngh/no-noise-linkedin/blob/main/LICENSE) file for more details.
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](https://github.com/karan51ngh/no-noise-linkedin/blob/main/LICENSE) file for more details.
 
-## Contributing
+## Acknowledgments
 
-1. Fork the repository.
-2. Clone your fork: `git clone https://github.com/your-username/no-noise-linkedin.git`
-3. Create a new branch: `git checkout -b feature-name`
-4. Commit your changes and push.
-5. Open a pull request.
+This project uses [react-content-script](https://github.com/yosevu/react-content-script) to integrate a React app as a content script and mount it inside a Shadow DOM host.
 
-## Contact
+## Author / Contact
 
-Have questions or suggestions? Feel free to reach out!
+- GitHub: [GitHub.com/Karan51ngh](https://github.com/karan51ngh/)
+- LinkedIn: [LinkedIn.com/in/Karan51ngh](https://www.linkedin.com/in/karan51ngh/)
+- 𝕏 / Twitter: [Karan5ingh](https://x.com/karan5ingh)
+- Medium: [karan51ngh.medium.com](https://karan51ngh.medium.com/)
+- GitHub Issues: [Issues](https://github.com/karan51ngh/no-noise-linkedin/issues)
+- Email: [karansingh9535@gmail.com](mailto:karansingh9535@gmail.com)
 
-- GitHub Issues: [Open an issue](https://github.com/karan51ngh/no-noise-linkedin/issues)
-- Email: [karansingh9535@gmail.com](mailto\:karansingh9535@gmail.com)
-- LinkedIn: [karan51ngh](https://www.linkedin.com/in/karan51ngh/)
-- X / Twitter: [karan_51ngh](https://x.com/karan_51ngh)
+## Thank You for Using No Noise LinkedIn!
 
-## Thank You for Using NoNoise LinkedIn!
-
-![NoNoise LinkedIn Logo](https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/3.png)
+![No Noise LinkedIn Logo](https://raw.githubusercontent.com/karan51ngh/no-noise-linkedin/main/assets/3.png)
