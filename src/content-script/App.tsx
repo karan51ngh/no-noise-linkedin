@@ -6,6 +6,17 @@ import { DEFAULTS, type Settings } from './constants';
 
 const icon32 = chrome.runtime.getURL('images/icon-32.png');
 
+export function getFirstPathSegment(urlString: string): string | null {
+  try {
+    const url = new URL(urlString);
+    const segments = url.pathname.split('/').filter(segment => segment.length > 0);
+    return segments.length > 0 ? segments[0] : null;
+  } catch (error) {
+    console.error("Invalid URL provided");
+    return null;
+  }
+}
+
 
 export default function App() {
   const [showPanel, setShowPanel] = useState(false);
@@ -59,16 +70,6 @@ export default function App() {
     initPurger(userSettings);
   }, [JSON.stringify(userSettings)]);
 
-  function getFirstPathSegment(urlString: string): string | null {
-    try {
-      const url = new URL(urlString);
-      const segments = url.pathname.split('/').filter(segment => segment.length > 0);
-      return segments.length > 0 ? segments[0] : null;
-    } catch (error) {
-      console.error("Invalid URL provided");
-      return null;
-    }
-  }
 
   const reloadExtension = () => {
     try {

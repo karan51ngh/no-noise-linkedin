@@ -1,4 +1,5 @@
 import { type Settings } from "./src/content-script/constants";
+import { getFirstPathSegment } from "./src/content-script/App";
 
 const DEV_LOGS = false;
 
@@ -31,21 +32,76 @@ function toggleHideSuggested(toggle: boolean) {
 
 function toggleHideNewsFeed(toggle: boolean) {
 
-    const newsModule =
-        (document.querySelector('#feed-news-module.news-module--with-game') as HTMLElement | null) ||
-        (document.getElementById('feed-news-module') as HTMLElement | null) ||
-        (document.querySelector('.news-module--with-game') as HTMLElement | null);
+    if (["feed"].includes(getFirstPathSegment(location.href) as string)) {
 
-    const newsAside =
-        (document.querySelector('aside.scaffold-layout__aside[aria-label="LinkedIn News"]') as HTMLElement | null) ||
-        (document.querySelector('aside[aria-label="LinkedIn News"]') as HTMLElement | null);
+        const newsModule =
+            (document.querySelector('#feed-news-module.news-module--with-game') as HTMLElement | null) ||
+            (document.getElementById('feed-news-module') as HTMLElement | null) ||
+            (document.querySelector('.news-module--with-game') as HTMLElement | null);
 
-    if (toggle) {
-        newsModule?.style.setProperty('display', 'none', 'important');
-        newsAside?.style.setProperty('display', 'none', 'important');
-    } else {
-        newsModule?.style.removeProperty('display');
-        newsAside?.style.removeProperty('display');
+        const newsAside =
+            (document.querySelector('aside.scaffold-layout__aside[aria-label="LinkedIn News"]') as HTMLElement | null) ||
+            (document.querySelector('aside[aria-label="LinkedIn News"]') as HTMLElement | null);
+
+        if (toggle) {
+            newsModule?.style.setProperty('display', 'none', 'important');
+            newsAside?.style.setProperty('display', 'none', 'important');
+        } else {
+            newsModule?.style.removeProperty('display');
+            newsAside?.style.removeProperty('display');
+        }
+    }
+
+    if (["mynetwork"].includes(getFirstPathSegment(location.href) as string)) {
+
+        const myNetworkAdSection =
+            (document.querySelector('iframe[title="advertisement"][componentkey*="mynetwork"]')?.closest('section') as HTMLElement | null) ||
+            (document.querySelector('iframe[title="advertisement"]')?.closest('section') as HTMLElement | null) ||
+            (document.querySelector('iframe[title="advertisement"]')?.parentElement as HTMLElement | null);
+
+        const myNetworkFooter =
+            (document.querySelector('[data-view-name^="compact-footer-"]')?.closest('footer') as HTMLElement | null) ||
+            (document.querySelector('footer [data-view-name^="compact-footer-"]')?.closest('footer') as HTMLElement | null);
+
+        const myNetworkFooterLogoRow =
+            (document.querySelector('svg#linkedin-logo-xxsmall')?.closest('div') as HTMLElement | null) ||
+            (document.getElementById('linkedin-logo-xxsmall')?.closest('div') as HTMLElement | null);
+
+        if (toggle) {
+            myNetworkAdSection?.style.setProperty('display', 'none', 'important');
+            myNetworkFooter?.style.setProperty('display', 'none', 'important');
+            myNetworkFooterLogoRow?.style.setProperty('display', 'none', 'important');
+        } else {
+            myNetworkAdSection?.style.removeProperty('display');
+            myNetworkFooter?.style.removeProperty('display');
+            myNetworkFooterLogoRow?.style.removeProperty('display');
+        }
+    }
+
+    if (["messaging", "notifications"].includes(getFirstPathSegment(location.href) as string)) {
+
+        const newsModule =
+            (document.querySelector('aside.scaffold-layout__aside section.ad-banner-container') as HTMLElement | null) ||
+            (document.querySelector('aside.scaffold-layout__aside .ad-banner-container') as HTMLElement | null) ||
+            (document.querySelector('section.ad-banner-container') as HTMLElement | null);
+
+        const footerLinks =
+            (document.querySelector('ul.global-footer-compact__links') as HTMLElement | null) ||
+            (document.querySelector('.global-footer-compact__links') as HTMLElement | null);
+
+        const footerCopyright =
+            (document.getElementById('compactfooter-copyright') as HTMLElement | null) ||
+            (document.querySelector('#compactfooter-copyright.global-footer-compact__content') as HTMLElement | null);
+
+        if (toggle) {
+            newsModule?.style.setProperty('display', 'none', 'important');
+            footerLinks?.style.setProperty('display', 'none', 'important');
+            footerCopyright?.style.setProperty('display', 'none', 'important');
+        } else {
+            newsModule?.style.removeProperty('display');
+            footerLinks?.style.removeProperty('display');
+            footerCopyright?.style.removeProperty('display');
+        }
     }
 }
 
@@ -65,14 +121,21 @@ function toggleHideMainFeed(toggle: boolean) {
         (document.querySelector('button.artdeco-button.scaffold-finite-scroll__load-button') as HTMLElement | null) ||
         (document.getElementById('ember322') as HTMLElement | null);
 
+    const newUpdatePillButton =
+        (document.querySelector('button.feed-new-update-pill__new-update-button') as HTMLElement | null) ||
+        (document.querySelector('div.feed-new-update-pill__loader')?.closest('button') as HTMLElement | null) ||
+        (document.querySelector('button.artdeco-button.feed-new-update-pill__new-update-button') as HTMLElement | null);
+
     if (toggle) {
         mainFeed?.style.setProperty('display', 'none', 'important');
         mainFeedSortButton?.style.setProperty('display', 'none', 'important');
         loadMoreButton?.style.setProperty('display', 'none', 'important');
+        newUpdatePillButton?.style.setProperty('display', 'none', 'important');
     } else {
         mainFeed?.style.removeProperty('display');
         mainFeedSortButton?.style.removeProperty('display');
         loadMoreButton?.style.removeProperty('display');
+        newUpdatePillButton?.style.removeProperty('display');
     }
 }
 
@@ -120,26 +183,26 @@ function findUnwantedSpans(userSettings: Settings) {
 
 }
 
+function purgerLogic(userSettings: Settings) {
+    if (["feed"].includes(getFirstPathSegment(location.href) as string)) {
+        toggleHideMainFeed(userSettings.disableFeed);
+        findUnwantedSpans(userSettings);
+    }
+
+    if (["feed", "mynetwork", "notifications", "messaging"].includes(getFirstPathSegment(location.href) as string)) {
+        toggleHideNewsFeed(userSettings.disableNews);
+    }
+
+}
+
 export function initPurger(userSettings: Settings) {
 
-    toggleHideMainFeed(userSettings.disableFeed);
-    toggleHideNewsFeed(userSettings.disableNews);
-    findUnwantedSpans(userSettings);
-
+    purgerLogic(userSettings)
     const observer = new MutationObserver(() => {
         DEV_LOGS && console.log("mutation occurred");
-        if (window.location.href.includes('feed')) {
-            findUnwantedSpans(userSettings);
-            toggleHideMainFeed(userSettings.disableFeed);
-            toggleHideNewsFeed(userSettings.disableNews);
-        }
+        purgerLogic(userSettings)
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
 
-    window.onload = function () {
-        DEV_LOGS && console.log("Hello Friend");
-        findUnwantedSpans(userSettings); // Initial execution
-    };
 }
-
