@@ -16,7 +16,7 @@
     },
     "web_accessible_resources": [
       {
-        "resources": ["images/*.png"],
+        "resources": ["images/*.png", "images/*.svg"],
         "matches": ["https://www.linkedin.com/*"]
       }
     ],

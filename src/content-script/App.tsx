@@ -4,7 +4,7 @@ import ControlPanel from './ControlPanel'
 import { useSettings } from './useSettings';
 import { DEFAULTS, type Settings } from './constants';
 
-const icon32 = chrome.runtime.getURL('images/icon-32.png');
+const icon32 = chrome.runtime.getURL('images/no-noise-inkedIn-logo.svg');
 
 export function getFirstPathSegment(urlString: string): string | null {
   try {
@@ -20,6 +20,7 @@ export function getFirstPathSegment(urlString: string): string | null {
 
 export default function App() {
   const [showPanel, setShowPanel] = useState(false);
+  const [hover, setHover] = useState(false);
   const { area, getAll } = useSettings();
   const [userSettings, setUserSettings] = useState<Settings>(DEFAULTS);
 
@@ -102,7 +103,20 @@ export default function App() {
           title='No Noise LinkedIn Control panel'
           style={{ background: 'transparent', border: 'none', padding: 0, margin: 0, lineHeight: 0, boxShadow: 'none', cursor: 'pointer', display: 'inline-block' }}
         >
-          <img src={icon32} alt="No Noise LinkedIn Control panel" width={32} height={32} style={{ display: 'block' }} />
+          <img
+            src={icon32}
+            alt="No Noise LinkedIn Control panel"
+            width={32}
+            height={32}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+            style={{
+              display: 'block',
+              filter: `brightness(${(showPanel ? 70 : 100)}%)`,
+              transition: 'filter .2s ease, transform .2s ease',
+              transform: hover ? 'translateY(-1px)' : 'translateY(0)'
+            }}
+          />
         </button>
       </div>
       {showPanel && (
