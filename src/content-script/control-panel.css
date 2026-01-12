@@ -164,6 +164,15 @@
   box-shadow: 0 0 0 3px rgba(10,132,255,0.3);
 }
 
+.nnl-cp .nnl-cp-social-text a {
+  color: #8e8e93;
+  transition: color .2s ease, transform .2s ease;
+}
+.nnl-cp .nnl-cp-social-text a:hover {
+  color: #1d1d1f;
+  transform: translateY(-0.5px);
+}
+
 .nnl-cp .nnl-cp-social {
   display: flex;
   justify-content: center;
@@ -182,11 +191,11 @@
 }
 
 .nnl-cp .nnl-cp-pill {
-  color: #1f2937;
+  color: #8e8e93;
   transition: color .2s ease, transform .2s ease, background-color .2s ease;
 }
 .nnl-cp .nnl-cp-pill:hover {
-  color: #111827;
+  color: #1d1d1f;
   background-color: #e5e7eb;
   transform: translateY(-0.5px);
 }
