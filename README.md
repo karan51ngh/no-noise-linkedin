@@ -44,7 +44,6 @@ No Noise LinkedIn is a browser extension that declutters your LinkedIn experienc
 ### Chrome Web Store
 - All Chromium-based browsers—Brave, Google Chrome, Microsoft Edge, Vivaldi, etc. are supported.
 - Chrome Web Store: [Link](https://chromewebstore.google.com/detail/hbcjelfhlljdepmifggbmhnklhmdmldn)
-- Note: The latest version (v2.0.0) is currently under review on the Chrome Web Store and will reflect soon.
 - Click Add to Chrome.
 
 
