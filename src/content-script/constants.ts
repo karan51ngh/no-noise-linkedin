@@ -6,9 +6,9 @@ export type Settings = {
 };
 
 export const DEFAULTS: Settings = {
-  disablePromoted: false,
-  disableSuggested: false,
-  disableNews: false,
+  disablePromoted: true,
+  disableSuggested: true,
+  disableNews: true,
   disableFeed: false,
 };
 

@@ -4,7 +4,7 @@ import ControlPanel from './ControlPanel'
 import { useSettings } from './useSettings';
 import { DEFAULTS, type Settings } from './constants';
 
-const icon32 = chrome.runtime.getURL('images/no-noise-linkedin-logo.svg');
+const icon32 = chrome.runtime.getURL('images/no-noise-linkedin-logo-dark.svg');
 
 export function getFirstPathSegment(urlString: string): string | null {
   try {
@@ -112,7 +112,8 @@ export default function App() {
             onMouseLeave={() => setHover(false)}
             style={{
               display: 'block',
-              filter: `brightness(${(showPanel ? 70 : 100)}%)`,
+              borderRadius: 4,
+              filter: `brightness(${(showPanel ? 100 : 70)}%) drop-shadow(0 0 0 rgba(255, 255, 255, 0.35))`,
               transition: 'filter .2s ease, transform .2s ease',
               transform: hover ? 'translateY(-1px)' : 'translateY(0)'
             }}
