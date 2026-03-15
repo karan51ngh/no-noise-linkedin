@@ -32,24 +32,21 @@ function toggleHideSuggested(toggle: boolean) {
 
 function toggleHideNewsFeed(toggle: boolean) {
 
-    if (["feed"].includes(getFirstPathSegment(location.href) as string)) {
+    const newsModule =
+        (document.querySelector('#feed-news-module.news-module--with-game') as HTMLElement | null) ||
+        (document.getElementById('feed-news-module') as HTMLElement | null) ||
+        (document.querySelector('.news-module--with-game') as HTMLElement | null);
 
-        const newsModule =
-            (document.querySelector('#feed-news-module.news-module--with-game') as HTMLElement | null) ||
-            (document.getElementById('feed-news-module') as HTMLElement | null) ||
-            (document.querySelector('.news-module--with-game') as HTMLElement | null);
+    const newsAside =
+        (document.querySelector('aside.scaffold-layout__aside[aria-label="LinkedIn News"]') as HTMLElement | null) ||
+        (document.querySelector('aside[aria-label="LinkedIn News"]') as HTMLElement | null);
 
-        const newsAside =
-            (document.querySelector('aside.scaffold-layout__aside[aria-label="LinkedIn News"]') as HTMLElement | null) ||
-            (document.querySelector('aside[aria-label="LinkedIn News"]') as HTMLElement | null);
-
-        if (toggle) {
-            newsModule?.style.setProperty('display', 'none', 'important');
-            newsAside?.style.setProperty('display', 'none', 'important');
-        } else {
-            newsModule?.style.removeProperty('display');
-            newsAside?.style.removeProperty('display');
-        }
+    if (toggle) {
+        newsModule?.style.setProperty('display', 'none', 'important');
+        newsAside?.style.setProperty('display', 'none', 'important');
+    } else {
+        newsModule?.style.removeProperty('display');
+        newsAside?.style.removeProperty('display');
     }
 
     if (["mynetwork"].includes(getFirstPathSegment(location.href) as string)) {
@@ -106,8 +103,8 @@ function toggleHideNewsFeed(toggle: boolean) {
 }
 
 function toggleHideMainFeed(toggle: boolean) {
-    const mainFeed =
-        (document.querySelector('div.scaffold-finite-scroll__content[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
+	const mainFeed =
+        (document.querySelector('[componentkey="container-update-list_mainFeed-lazy-container"]') as HTMLElement | null) ||
         (document.querySelector('[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
         (document.querySelector('.scaffold-finite-scroll__content') as HTMLElement | null);
 
@@ -139,48 +136,56 @@ function toggleHideMainFeed(toggle: boolean) {
     }
 }
 
-function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: number) {
-    if ((type === 'suggested' && count === 7) || (type === 'promoted' && count === 9)) {
-        DEV_LOGS && console.log("Unwanted Post Detected")
-
-        type === 'suggested'
-            ? suggestedPosts.push(element)
-            : promotedPosts.push(element)
-        return;
+// Walk up the DOM tree and return the nth ancestor that has a componentkey attribute.
+// LinkedIn uses componentkey on post card containers consistently, even as class names change.
+function getNthComponentKeyAncestor(el: HTMLElement, n: number): HTMLElement | null {
+    let current: HTMLElement | null = el;
+    let count = 0;
+    while (current?.parentElement) {
+        current = current.parentElement;
+        if (current.hasAttribute('componentkey')) {
+            count++;
+            if (count === n) return current;
+        }
     }
-    else {
-        deleteUnwantedSpans(type, element?.parentNode as HTMLElement, count + 1);
-    }
+    return null;
 }
 
 function findUnwantedSpans(userSettings: Settings) {
-    console.log("findUnwantedSpans() triggered")
-    const suggestedSpans = Array.from(document.getElementsByTagName("span"))
-        .filter((span) => {
-            if (span.innerHTML.includes("Suggested")) {
-                DEV_LOGS && console.log("Suggested post detected.")
-                return true;
-            }
-        });
+    DEV_LOGS && console.log("findUnwantedSpans() triggered");
 
-    const promotedSpans = Array.from(document.getElementsByTagName("span"))
-        .filter((span) => {
-            if (span.innerHTML.includes("Promoted")) {
-                DEV_LOGS && console.log("Promoted post detected.")
-                return true;
-            }
-        });
+    // Clear previous results on each run to avoid stale references accumulating
+    // across MutationObserver calls as the feed loads more posts.
+    suggestedPosts.length = 0;
+    promotedPosts.length = 0;
 
-    suggestedSpans.forEach((s) => {
-        deleteUnwantedSpans('suggested', s, 0);
-    })
+    // LinkedIn changed "Suggested" and "Promoted" labels from <span> to <p> elements.
+    // We search both tag types to handle either DOM variant.
+    const allElements = [
+        ...Array.from(document.getElementsByTagName("p")),
+        ...Array.from(document.getElementsByTagName("span"))
+    ];
+
+    allElements.forEach((el) => {
+        const text = el.textContent?.trim();
+        if (text === 'Suggested') {
+            DEV_LOGS && console.log("Suggested post detected.");
+            // The post card is the 4th ancestor with a componentkey attribute.
+            const postCard = getNthComponentKeyAncestor(el as HTMLElement, 4);
+            if (postCard && !suggestedPosts.includes(postCard)) {
+                suggestedPosts.push(postCard);
+            }
+        } else if (text === 'Promoted') {
+            DEV_LOGS && console.log("Promoted post detected.");
+            const postCard = getNthComponentKeyAncestor(el as HTMLElement, 4);
+            if (postCard && !promotedPosts.includes(postCard)) {
+                promotedPosts.push(postCard);
+            }
+        }
+    });
+
     toggleHideSuggested(userSettings.disableSuggested);
-
-    promotedSpans.forEach((s) => {
-        deleteUnwantedSpans('promoted', s, 0);
-    })
     toggleHidePromoted(userSettings.disablePromoted);
-
 }
 
 function purgerLogic(userSettings: Settings) {
