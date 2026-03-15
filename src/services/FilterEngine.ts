@@ -184,15 +184,9 @@ function findUnwantedSpans(userSettings: Settings) {
 }
 
 function purgerLogic(userSettings: Settings) {
-    if (["feed"].includes(getFirstPathSegment(location.href) as string)) {
-        toggleHideMainFeed(userSettings.disableFeed);
-        findUnwantedSpans(userSettings);
-    }
-
-    if (["feed", "mynetwork", "notifications", "messaging"].includes(getFirstPathSegment(location.href) as string)) {
-        toggleHideNewsFeed(userSettings.disableNews);
-    }
-
+    toggleHideMainFeed(userSettings.disableFeed);
+    findUnwantedSpans(userSettings);
+    toggleHideNewsFeed(userSettings.disableNews);
 }
 
 export function initPurger(userSettings: Settings) {
