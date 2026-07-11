@@ -58,6 +58,18 @@ export default function ControlPanel(props: ControlPanelProps) {
         </ControlPanelRow>
 
         <ControlPanelRow
+          primaryText={<span>Disable <strong>From your activity</strong> Posts</span>}
+          secondaryText="Block From your activity posts from your feed."
+        >
+          <Switch
+            id="nnl-from-activity"
+            name="nnl-from-activity"
+            checked={props.userSettings.disableFromActivity}
+            onChange={toggle('disableFromActivity')}
+          />
+        </ControlPanelRow>
+
+        <ControlPanelRow
           primaryText={<span><strong>Focus Mode:</strong></span>}
           secondaryText="Hide LinkedIn home feed."
         >
