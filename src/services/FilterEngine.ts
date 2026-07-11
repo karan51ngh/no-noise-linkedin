@@ -5,28 +5,13 @@ const DEV_LOGS = false;
 
 const promotedPosts: (HTMLElement | null)[] = [];
 const suggestedPosts: (HTMLElement | null)[] = [];
+const fromActivityPosts: (HTMLElement | null)[] = [];
 
-function toggleHidePromoted(toggle: boolean) {
-    promotedPosts.forEach((pp) => {
-        if (!pp) return;
-        if (toggle) {
-            // Hide the element
-            pp.style.setProperty('display', 'none', 'important');
-        } else {
-            // Unhide (restore original display)
-            pp.style.removeProperty('display');
-        }
-    })
-}
-
-function toggleHideSuggested(toggle: boolean) {
-    suggestedPosts.forEach((sp) => {
-        if (!sp) return;
-        if (toggle) {
-            sp.style.setProperty('display', 'none', 'important');
-        } else {
-            sp.style.removeProperty('display');
-        }
+function toggleHidePosts(posts: (HTMLElement | null)[], toggle: boolean) {
+    posts.forEach((post) => {
+        if (!post) return;
+        if (toggle) post.style.setProperty('display', 'none', 'important');
+        else post.style.removeProperty('display');
     })
 }
 
@@ -140,12 +125,14 @@ function toggleHideMainFeed(toggle: boolean) {
 }
 
 function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: number) {
-    if ((type === 'suggested' && count === 7) || (type === 'promoted' && count === 9)) {
+    if ((type === 'suggested' && count === 7) ||
+        (type === 'fromActivity' && count === 7) ||
+        (type === 'promoted' && count === 9)) {
         DEV_LOGS && console.log("Unwanted Post Detected")
 
-        type === 'suggested'
-            ? suggestedPosts.push(element)
-            : promotedPosts.push(element)
+        if (type === 'suggested') suggestedPosts.push(element)
+        else if (type === 'fromActivity') fromActivityPosts.push(element)
+        else promotedPosts.push(element)
         return;
     }
     else {
@@ -155,31 +142,19 @@ function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: n
 
 function findUnwantedSpans(userSettings: Settings) {
     console.log("findUnwantedSpans() triggered")
-    const suggestedSpans = Array.from(document.getElementsByTagName("span"))
-        .filter((span) => {
-            if (span.innerHTML.includes("Suggested")) {
-                DEV_LOGS && console.log("Suggested post detected.")
-                return true;
-            }
-        });
+    const spans = Array.from(document.getElementsByTagName("span"));
+    const suggestedSpans = spans.filter((span) => span.innerHTML.includes("Suggested"));
+    const promotedSpans = spans.filter((span) => span.innerHTML.includes("Promoted"));
+    const fromActivitySpans = spans.filter((span) => span.innerHTML.includes("From your activity"));
 
-    const promotedSpans = Array.from(document.getElementsByTagName("span"))
-        .filter((span) => {
-            if (span.innerHTML.includes("Promoted")) {
-                DEV_LOGS && console.log("Promoted post detected.")
-                return true;
-            }
-        });
+    suggestedSpans.forEach((span) => deleteUnwantedSpans('suggested', span, 0));
+    toggleHidePosts(suggestedPosts, userSettings.disableSuggested);
 
-    suggestedSpans.forEach((s) => {
-        deleteUnwantedSpans('suggested', s, 0);
-    })
-    toggleHideSuggested(userSettings.disableSuggested);
+    promotedSpans.forEach((span) => deleteUnwantedSpans('promoted', span, 0));
+    toggleHidePosts(promotedPosts, userSettings.disablePromoted);
 
-    promotedSpans.forEach((s) => {
-        deleteUnwantedSpans('promoted', s, 0);
-    })
-    toggleHidePromoted(userSettings.disablePromoted);
+    fromActivitySpans.forEach((span) => deleteUnwantedSpans('fromActivity', span, 0));
+    toggleHidePosts(fromActivityPosts, userSettings.disableFromActivity);
 
 }
 
