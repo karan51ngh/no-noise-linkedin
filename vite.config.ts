@@ -6,6 +6,11 @@ import manifest from './manifest.json';
 const isFirefox = process.env.FIREFOX === 'true';
 
 export default defineConfig({
+  server: {
+    cors: {
+      origin: [/^chrome-extension:\/\//, /^moz-extension:\/\//],
+    },
+  },
   plugins: [
     react(),
     crx({
@@ -14,4 +19,3 @@ export default defineConfig({
     }),
   ],
 });
-

@@ -22,18 +22,26 @@ function toggleHideNewsFeed(toggle: boolean) {
         const newsModule =
             (document.querySelector('#feed-news-module.news-module--with-game') as HTMLElement | null) ||
             (document.getElementById('feed-news-module') as HTMLElement | null) ||
-            (document.querySelector('.news-module--with-game') as HTMLElement | null);
+            (document.querySelector('.news-module--with-game') as HTMLElement | null) ||
+            (document.querySelector('a[href*="/news/story/"]')
+                ?.closest('div[data-display-contents="true"]')
+                ?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement as HTMLElement | null);
 
         const newsAside =
             (document.querySelector('aside.scaffold-layout__aside[aria-label="LinkedIn News"]') as HTMLElement | null) ||
             (document.querySelector('aside[aria-label="LinkedIn News"]') as HTMLElement | null);
 
+        const newsFooter =
+            (document.querySelector('footer a[href^="https://about.linkedin.com"]')?.closest('footer') as HTMLElement | null);
+
         if (toggle) {
             newsModule?.style.setProperty('display', 'none', 'important');
             newsAside?.style.setProperty('display', 'none', 'important');
+            newsFooter?.style.setProperty('display', 'none', 'important');
         } else {
             newsModule?.style.removeProperty('display');
             newsAside?.style.removeProperty('display');
+            newsFooter?.style.removeProperty('display');
         }
     }
 
@@ -92,6 +100,7 @@ function toggleHideNewsFeed(toggle: boolean) {
 
 function toggleHideMainFeed(toggle: boolean) {
     const mainFeed =
+        (document.querySelector('[data-testid="mainFeed"]') as HTMLElement | null) ||
         (document.querySelector('div.scaffold-finite-scroll__content[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
         (document.querySelector('[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
         (document.querySelector('.scaffold-finite-scroll__content') as HTMLElement | null);
