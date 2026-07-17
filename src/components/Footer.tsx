@@ -1,8 +1,4 @@
-import { Heart, Star } from 'lucide-react';
-import xIcon from '../../images/brand-svgs/x.svg';
-import linkedinIcon from '../../images/brand-svgs/linkedin.svg';
-import instagramIcon from '../../images/brand-svgs/instagram.svg';
-import protonmailIcon from '../../images/brand-svgs/protonmail.svg';
+import { Heart, Star, UserRound } from 'lucide-react';
 import chromeIcon from '../../images/brand-svgs/googlechrome.svg';
 import firefoxIcon from '../../images/brand-svgs/firefoxbrowser.svg';
 
@@ -31,9 +27,9 @@ export default function Footer() {
     return (
         <div className="nnl-cp-section nnl-cp-footer">
             <div className="nnl-cp-desc">
-                <div className="nnl-cp-social-text">
-                    Made by <a href="https://github.com/karan51ngh" target="_blank" rel="noopener noreferrer">@karan51ngh</a> with <Heart size={12} color="#ec4899" fill="#ec4899" strokeWidth={2.5} />
-                </div>
+                {/* <div className="nnl-cp-social-text">
+                    Made by <a href="https://www.linkedin.com/in/karan51ngh/" target="_blank" rel="noopener noreferrer">@karan51ngh</a> with <Heart size={12} color="#ec4899" fill="#ec4899" strokeWidth={2.5} />
+                </div> */}
             </div>
             <div className="nnl-cp-footer-content">
                 {/* Project Actions (Pills) */}
@@ -58,27 +54,15 @@ export default function Footer() {
                         {isFirefox ? (<SvgIcon src={firefoxIcon} size={16} title="Firefox" />) : (<SvgIcon src={chromeIcon} size={16} title="Chrome" />)}
                         <span>Review</span>
                     </a>
-                </div>
-
-                <div className="nnl-cp-divider"></div>
-                <div className="nnl-cp-social">
-                    {[
-                        { icon: linkedinIcon, href: 'https://www.linkedin.com/in/karan51ngh', title: 'LinkedIn' },
-                        { icon: instagramIcon, href: 'https://www.instagram.com/karan51ngh', title: 'Instagram' },
-                        { icon: protonmailIcon, href: 'mailto:karansingh9535@gmail.com', title: 'Email' },
-                        { icon: xIcon, href: 'https://twitter.com/karan5ingh', title: 'X / Twitter' },
-                    ].map(({ icon, href, title }, i) => (
-                        <a
-                            key={i}
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={title}
-                            title={title}
-                        >
-                            <SvgIcon src={icon} size={16} title={title} />
-                        </a>
-                    ))}
+                    <a
+                        className="nnl-cp-pill"
+                        href="https://karanbagga.com?utm_campaign=no-noise-linkedin"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <UserRound size={16} fill="currentColor" strokeWidth={2.5} />
+                        <span>karanbagga.com</span>
+                    </a>
                 </div>
             </div>
         </div>

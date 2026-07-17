@@ -18,6 +18,14 @@ const Reload: FC<ReloadProps> = ({ closePanel, hardRefresh }) => {
             >
                 Reload
             </button>
+            <a
+                href="https://github.com/karan51ngh/no-noise-linkedin/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nnl-cp-button"
+            >
+                Report issue
+            </a>
         </div>
     );
 };

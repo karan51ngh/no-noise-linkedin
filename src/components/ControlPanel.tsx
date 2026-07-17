@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react';
 import { useSettings } from './useSettings';
 import type { Settings } from './constants';
+// @ts-ignore: allow side-effect CSS import when no typings are provided
 import '../style.css';
 import Header from './Header';
 import Footer from './Footer';
@@ -35,7 +36,7 @@ export default function ControlPanel(props: ControlPanelProps) {
       <div className="nnl-cp-section" data-title="LinkedIn Feed">
         <ControlPanelRow
           primaryText={<span>Disable <strong>Promoted</strong> Posts</span>}
-          secondaryText="Block Promoted posts from your feed."
+          // secondaryText="Block Promoted posts from your feed."
         >
           <Switch
             id="nnl-promoted"
@@ -47,7 +48,7 @@ export default function ControlPanel(props: ControlPanelProps) {
 
         <ControlPanelRow
           primaryText={<span>Disable <strong>Suggested</strong> Posts</span>}
-          secondaryText="Block Suggested posts from your feed."
+          // secondaryText="Block Suggested posts from your feed."
         >
           <Switch
             id="nnl-suggested"
@@ -59,7 +60,7 @@ export default function ControlPanel(props: ControlPanelProps) {
 
         <ControlPanelRow
           primaryText={<span>Disable <strong>From your activity</strong> Posts</span>}
-          secondaryText="Block From your activity posts from your feed."
+          // secondaryText="Block From your activity posts from your feed."
         >
           <Switch
             id="nnl-from-activity"
@@ -80,11 +81,9 @@ export default function ControlPanel(props: ControlPanelProps) {
             onChange={toggle('disableFeed')}
           />
         </ControlPanelRow>
-      </div>
-      <div className="nnl-cp-section" data-title="Site-Wide Settings">
         <ControlPanelRow
-          primaryText="News & Ad Sections"
-          secondaryText="Remove LinkedIn News & Ad sidebars."
+          primaryText="News, Ad & Puzzles Sections"
+          // secondaryText="Remove LinkedIn News & Ad sidebars."
         >
           <Switch
             id="nnl-news"
