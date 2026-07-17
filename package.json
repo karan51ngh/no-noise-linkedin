@@ -8,7 +8,9 @@
     "dev:firefox": "FIREFOX=true vite",
     "build": "tsc && vite build",
     "build:firefox": "tsc && FIREFOX=true vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sanitize-html": "node sanitize_html.js",
+    "test:sanitize-html": "node --test test_sanitize_html.js"
   },
   "dependencies": {
     "lucide-react": "^0.562.0",
@@ -23,6 +25,7 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "cheerio": "^1.1.2",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.9",
     "typescript": "^5.5.4",
