@@ -78,6 +78,13 @@
 
   /* Gray Light Color - Dark */
   --nnl-gray-light-dark: rgba(58, 58, 60, 1); /* #3A3A3C */
+
+  /* Typography roles */
+  --nnl-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --nnl-font-weight-title: 300;
+  --nnl-font-weight-regular: 400;
+  --nnl-font-weight-category: 600;
+  --nnl-font-weight-strong: 700;
 }
 
 [data-theme='DARK'] {
@@ -143,7 +150,8 @@
   padding: 12px;
   z-index: 2147483647;
   pointer-events: auto;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family: var(--nnl-font-family);
+  font-weight: var(--nnl-font-weight-regular);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.01em;
@@ -170,12 +178,12 @@
 .nnl-cp .nnl-cp-title .brand {
   font-size: 13px;
   color: var(--nnl-text-primary);
-  font-weight: 500;
+  font-weight: var(--nnl-font-weight-regular);
 }
 
 .nnl-cp .nnl-cp-title .panel {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: var(--nnl-font-weight-title);
   color: var(--nnl-text-primary);
   letter-spacing: -0.015em;
 }
@@ -236,7 +244,11 @@
 
 .nnl-cp .nnl-cp-label {
   color: var(--nnl-text-primary);
-  font-weight: 500;
+  font-weight: var(--nnl-font-weight-regular);
+}
+
+.nnl-cp strong {
+  font-weight: var(--nnl-font-weight-strong);
 }
 
 .nnl-cp .nnl-cp-row input[type="checkbox"] {
@@ -302,7 +314,7 @@
   background: transparent;
   color: var(--nnl-accent);
   cursor: pointer;
-  font-weight: 600;
+  font-weight: var(--nnl-font-weight-regular);
   text-decoration: none;
   transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
 }
@@ -324,7 +336,7 @@
 
 .nnl-cp .nnl-cp-social-text a {
   text-decoration: none;
-  font-weight: 600;
+  font-weight: var(--nnl-font-weight-strong);
   color: var(--nnl-text-secondary);
   transition: color .2s ease, transform .2s ease;
 }
@@ -377,7 +389,7 @@
   border-radius: 100px;
   text-decoration: none;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: var(--nnl-font-weight-category);
   color: var(--nnl-text-secondary);
   transition: color .2s ease, transform .2s ease, background-color .2s ease;
 }

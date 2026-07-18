@@ -13,7 +13,7 @@ export const DEFAULTS: Settings = {
   disableFromActivity: true,
   disableNews: true,
   disableFeed: false,
-  theme: 'DARK',
+  theme: 'LIGHT',
 };
 
 export type StorageArea = 'sync' | 'local';
