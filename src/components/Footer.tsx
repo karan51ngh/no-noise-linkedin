@@ -46,10 +46,12 @@ export default function Footer() {
                     </a>
                     <a
                         className="nnl-cp-pill"
-                        href="https://chromewebstore.google.com/detail/nonoise-linkedin/hbcjelfhlljdepmifggbmhnklhmdmldn/reviews"
+                        href={isFirefox
+                            ? 'https://addons.mozilla.org/en-US/firefox/addon/no-noise-linkedin/'
+                            : 'https://chromewebstore.google.com/detail/nonoise-linkedin/hbcjelfhlljdepmifggbmhnklhmdmldn/reviews'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        title="Write a review on Chrome Web Store"
+                        title={isFirefox ? 'Install from Firefox Add-ons' : 'Write a review on Chrome Web Store'}
                     >
                         {isFirefox ? (<SvgIcon src={firefoxIcon} size={16} title="Firefox" />) : (<SvgIcon src={chromeIcon} size={16} title="Chrome" />)}
                         <span>Review</span>
