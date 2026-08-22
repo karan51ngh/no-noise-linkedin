@@ -301,6 +301,11 @@
     0 0 0 0.5px color-mix(in srgb, var(--nnl-black) 5%, transparent);
 }
 
+.nnl-cp .nnl-cp-row input[type="checkbox"]:disabled + .nnl-cp-switch {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
 .nnl-cp .nnl-cp-actions {
   display: flex;
   gap: 8px;

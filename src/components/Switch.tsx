@@ -4,10 +4,11 @@ type SwitchProps = {
     id: string;
     name?: string;
     checked: boolean;
+    disabled?: boolean;
     onChange: ChangeEventHandler<HTMLInputElement>;
 };
 
-export default function Switch({ id, name, checked, onChange }: SwitchProps) {
+export default function Switch({ id, name, checked, disabled, onChange }: SwitchProps) {
     return (
         <>
             <input
@@ -15,6 +16,7 @@ export default function Switch({ id, name, checked, onChange }: SwitchProps) {
                 name={name || id}
                 type="checkbox"
                 checked={checked}
+                disabled={disabled}
                 onChange={onChange}
             />
             <span className="nnl-cp-switch" aria-hidden="true">

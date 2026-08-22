@@ -35,6 +35,18 @@ export default function ControlPanel(props: ControlPanelProps) {
       />
       <div className="nnl-cp-section" data-title="LinkedIn Feed">
         <ControlPanelRow
+          primaryText={<span><strong>Focus Mode:</strong></span>}
+          secondaryText="Hide LinkedIn home feed."
+        >
+          <Switch
+            id="nnl-feed"
+            name="nnl-feed"
+            checked={props.userSettings.disableFeed}
+            onChange={toggle('disableFeed')}
+          />
+        </ControlPanelRow>
+
+        <ControlPanelRow
           primaryText={<span>Disable <strong>Promoted</strong> Posts</span>}
           // secondaryText="Block Promoted posts from your feed."
         >
@@ -42,6 +54,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             id="nnl-promoted"
             name="nnl-promoted"
             checked={props.userSettings.disablePromoted}
+            disabled={props.userSettings.disableFeed}
             onChange={toggle('disablePromoted')}
           />
         </ControlPanelRow>
@@ -54,6 +67,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             id="nnl-suggested"
             name="nnl-suggested"
             checked={props.userSettings.disableSuggested}
+            disabled={props.userSettings.disableFeed}
             onChange={toggle('disableSuggested')}
           />
         </ControlPanelRow>
@@ -66,6 +80,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             id="nnl-from-activity"
             name="nnl-from-activity"
             checked={props.userSettings.disableFromActivity}
+            disabled={props.userSettings.disableFeed}
             onChange={toggle('disableFromActivity')}
           />
         </ControlPanelRow>
@@ -78,19 +93,8 @@ export default function ControlPanel(props: ControlPanelProps) {
             id="nnl-images"
             name="nnl-images"
             checked={props.userSettings.disableImages}
+            disabled={props.userSettings.disableFeed}
             onChange={toggle('disableImages')}
-          />
-        </ControlPanelRow>
-
-        <ControlPanelRow
-          primaryText={<span><strong>Focus Mode:</strong></span>}
-          secondaryText="Hide LinkedIn home feed."
-        >
-          <Switch
-            id="nnl-feed"
-            name="nnl-feed"
-            checked={props.userSettings.disableFeed}
-            onChange={toggle('disableFeed')}
           />
         </ControlPanelRow>
         <ControlPanelRow
@@ -101,6 +105,7 @@ export default function ControlPanel(props: ControlPanelProps) {
             id="nnl-news"
             name="nnl-news"
             checked={props.userSettings.disableNews}
+            disabled={props.userSettings.disableFeed}
             onChange={toggle('disableNews')}
           />
         </ControlPanelRow>
