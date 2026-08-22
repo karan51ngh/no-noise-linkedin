@@ -133,6 +133,21 @@ function toggleHideMainFeed(toggle: boolean) {
     }
 }
 
+function toggleHidePostImages(toggle: boolean) {
+    const mainFeed =
+        (document.querySelector('[data-testid="mainFeed"]') as HTMLElement | null) ||
+        (document.querySelector('[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
+        (document.querySelector('.scaffold-finite-scroll__content') as HTMLElement | null);
+
+    // ponytail: CDN markers avoid avatars; add another only when LinkedIn ships a new post-image path.
+    mainFeed?.querySelectorAll<HTMLElement>('img[src*="feedshare-"], img[src*="image-shrink_"]')
+        .forEach((image) => {
+            const media = image.closest('figure') || image;
+            if (toggle) media.style.setProperty('display', 'none', 'important');
+            else media.style.removeProperty('display');
+        });
+}
+
 function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: number) {
     if ((type === 'suggested' && count === 7) ||
         (type === 'fromActivity' && count === 7) ||
@@ -170,6 +185,7 @@ function findUnwantedSpans(userSettings: Settings) {
 function purgerLogic(userSettings: Settings) {
     if (["feed"].includes(getFirstPathSegment(location.href) as string)) {
         toggleHideMainFeed(userSettings.disableFeed);
+        toggleHidePostImages(userSettings.disableImages);
         findUnwantedSpans(userSettings);
     }
 

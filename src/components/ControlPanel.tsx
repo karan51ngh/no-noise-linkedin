@@ -71,6 +71,18 @@ export default function ControlPanel(props: ControlPanelProps) {
         </ControlPanelRow>
 
         <ControlPanelRow
+          primaryText={<span><strong>No Image Mode:</strong></span>}
+          secondaryText="Hide images in LinkedIn feed."
+        >
+          <Switch
+            id="nnl-images"
+            name="nnl-images"
+            checked={props.userSettings.disableImages}
+            onChange={toggle('disableImages')}
+          />
+        </ControlPanelRow>
+
+        <ControlPanelRow
           primaryText={<span><strong>Focus Mode:</strong></span>}
           secondaryText="Hide LinkedIn home feed."
         >
