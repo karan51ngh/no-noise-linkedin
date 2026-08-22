@@ -67,7 +67,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    initPurger(userSettings);
+    return initPurger(userSettings);
   }, [JSON.stringify(userSettings)]);
 
 

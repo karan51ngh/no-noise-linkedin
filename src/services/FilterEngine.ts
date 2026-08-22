@@ -1,208 +1,131 @@
 import { type Settings } from "../components/constants";
 import { getFirstPathSegment } from "../App";
+import { FILTER_SELECTORS, FILTERED_POST_LABELS } from "./filterSelectors.js";
 
-const DEV_LOGS = false;
+const hiddenFeedTargets = new Set<HTMLElement>();
+const hiddenNewsTargets = new Set<HTMLElement>();
+const hiddenPostImages = new Set<HTMLElement>();
+const hiddenPosts = new Set<HTMLElement>();
 
-const promotedPosts: (HTMLElement | null)[] = [];
-const suggestedPosts: (HTMLElement | null)[] = [];
-const fromActivityPosts: (HTMLElement | null)[] = [];
-
-function toggleHidePosts(posts: (HTMLElement | null)[], toggle: boolean) {
-    posts.forEach((post) => {
-        if (!post) return;
-        if (toggle) post.style.setProperty('display', 'none', 'important');
-        else post.style.removeProperty('display');
-    })
+function selectAll(selector: string, root: ParentNode = document) {
+    return Array.from(root.querySelectorAll<HTMLElement>(selector));
 }
 
-function toggleHideNewsFeed(toggle: boolean) {
+function replaceHiddenElements(
+    current: Set<HTMLElement>,
+    next: Iterable<HTMLElement | null | undefined>
+) {
+    for (const element of current) element.style.removeProperty('display');
+    current.clear();
+    for (const element of next) {
+        if (!element) continue;
+        current.add(element);
+        element.style.setProperty('display', 'none', 'important');
+    }
+}
 
-    if (["feed"].includes(getFirstPathSegment(location.href) as string)) {
+function getMainFeeds() {
+    return selectAll(FILTER_SELECTORS.mainFeed);
+}
 
-        const newsModule =
-            (document.querySelector('#feed-news-module.news-module--with-game') as HTMLElement | null) ||
-            (document.getElementById('feed-news-module') as HTMLElement | null) ||
-            (document.querySelector('.news-module--with-game') as HTMLElement | null) ||
-            (document.querySelector('a[href*="/news/story/"]')
-                ?.closest('div[data-display-contents="true"]')
-                ?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement as HTMLElement | null);
+function toggleHideNewsFeed(toggle: boolean, route: string | null) {
+    const targets = new Set<HTMLElement>();
 
-        const newsAside =
-            (document.querySelector('aside.scaffold-layout__aside[aria-label="LinkedIn News"]') as HTMLElement | null) ||
-            (document.querySelector('aside[aria-label="LinkedIn News"]') as HTMLElement | null);
+    selectAll(FILTER_SELECTORS.advertisements).forEach((advertisement) => {
+        targets.add(
+            advertisement.closest<HTMLElement>('.ad-banner-container') ??
+            advertisement.parentElement ??
+            advertisement
+        );
+    });
 
-        const newsFooter =
-            (document.querySelector('footer a[href^="https://about.linkedin.com"]')?.closest('footer') as HTMLElement | null);
+    selectAll(FILTER_SELECTORS.footerMarkers).forEach((marker) => {
+        const footer = marker.closest<HTMLElement>('footer');
+        if (footer) targets.add(footer);
+    });
 
-        if (toggle) {
-            newsModule?.style.setProperty('display', 'none', 'important');
-            newsAside?.style.setProperty('display', 'none', 'important');
-            newsFooter?.style.setProperty('display', 'none', 'important');
-        } else {
-            newsModule?.style.removeProperty('display');
-            newsAside?.style.removeProperty('display');
-            newsFooter?.style.removeProperty('display');
-        }
+    if (route === 'feed') {
+        selectAll(FILTER_SELECTORS.newsModule).forEach((module) => targets.add(module));
+        selectAll(FILTER_SELECTORS.newsStoryLink).forEach((link) => {
+            const container = link.closest<HTMLElement>(FILTER_SELECTORS.newsContainer);
+            if (container) targets.add(container);
+        });
     }
 
-    if (["mynetwork"].includes(getFirstPathSegment(location.href) as string)) {
-
-        const myNetworkAdSection =
-            (document.querySelector('iframe[title="advertisement"][componentkey*="mynetwork"]')?.closest('section') as HTMLElement | null) ||
-            (document.querySelector('iframe[title="advertisement"]')?.closest('section') as HTMLElement | null) ||
-            (document.querySelector('iframe[title="advertisement"]')?.parentElement as HTMLElement | null);
-
-        const myNetworkFooter =
-            (document.querySelector('[data-view-name^="compact-footer-"]')?.closest('footer') as HTMLElement | null) ||
-            (document.querySelector('footer [data-view-name^="compact-footer-"]')?.closest('footer') as HTMLElement | null);
-
-        const myNetworkFooterLogoRow =
-            (document.querySelector('svg#linkedin-logo-xxsmall')?.closest('div') as HTMLElement | null) ||
-            (document.getElementById('linkedin-logo-xxsmall')?.closest('div') as HTMLElement | null);
-
-        if (toggle) {
-            myNetworkAdSection?.style.setProperty('display', 'none', 'important');
-            myNetworkFooter?.style.setProperty('display', 'none', 'important');
-            myNetworkFooterLogoRow?.style.setProperty('display', 'none', 'important');
-        } else {
-            myNetworkAdSection?.style.removeProperty('display');
-            myNetworkFooter?.style.removeProperty('display');
-            myNetworkFooterLogoRow?.style.removeProperty('display');
-        }
+    if (route === 'mynetwork') {
+        const logoRow = document.getElementById('linkedin-logo-xxsmall')?.closest<HTMLElement>('div');
+        if (logoRow) targets.add(logoRow);
     }
 
-    if (["messaging", "notifications"].includes(getFirstPathSegment(location.href) as string)) {
-
-        const newsModule =
-            (document.querySelector('aside.scaffold-layout__aside section.ad-banner-container') as HTMLElement | null) ||
-            (document.querySelector('aside.scaffold-layout__aside .ad-banner-container') as HTMLElement | null) ||
-            (document.querySelector('section.ad-banner-container') as HTMLElement | null);
-
-        const footerLinks =
-            (document.querySelector('ul.global-footer-compact__links') as HTMLElement | null) ||
-            (document.querySelector('.global-footer-compact__links') as HTMLElement | null);
-
-        const footerCopyright =
-            (document.getElementById('compactfooter-copyright') as HTMLElement | null) ||
-            (document.querySelector('#compactfooter-copyright.global-footer-compact__content') as HTMLElement | null);
-
-        if (toggle) {
-            newsModule?.style.setProperty('display', 'none', 'important');
-            footerLinks?.style.setProperty('display', 'none', 'important');
-            footerCopyright?.style.setProperty('display', 'none', 'important');
-        } else {
-            newsModule?.style.removeProperty('display');
-            footerLinks?.style.removeProperty('display');
-            footerCopyright?.style.removeProperty('display');
-        }
-    }
+    replaceHiddenElements(hiddenNewsTargets, toggle ? targets : []);
 }
 
 function toggleHideMainFeed(toggle: boolean) {
-    const mainFeed =
-        (document.querySelector('[data-testid="mainFeed"]') as HTMLElement | null) ||
-        (document.querySelector('div.scaffold-finite-scroll__content[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
-        (document.querySelector('[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
-        (document.querySelector('.scaffold-finite-scroll__content') as HTMLElement | null);
+    const targets: (HTMLElement | null)[] = [
+        ...getMainFeeds(),
+        ...selectAll(FILTER_SELECTORS.feedControls.sortMarker)
+            .map((marker) => marker.closest<HTMLElement>('button')),
+        ...selectAll(FILTER_SELECTORS.feedControls.loadMore),
+        ...selectAll(FILTER_SELECTORS.feedControls.newUpdate)
+            .map((control) => control.closest<HTMLElement>('button')),
+    ];
 
-    const mainFeedSortButton =
-        (document.querySelector('button.artdeco-dropdown__trigger:has(> hr.feed-index-sort-border)') as HTMLElement | null) ||
-        (document.querySelector('hr.feed-index-sort-border')?.closest('button') as HTMLElement | null) ||
-        (document.querySelector('button.artdeco-dropdown__trigger.full-width[aria-expanded][type="button"]') as HTMLElement | null);
-
-    const loadMoreButton =
-        (document.querySelector('button.scaffold-finite-scroll__load-button') as HTMLElement | null) ||
-        (document.querySelector('button.artdeco-button.scaffold-finite-scroll__load-button') as HTMLElement | null) ||
-        (document.getElementById('ember322') as HTMLElement | null);
-
-    const newUpdatePillButton =
-        (document.querySelector('button.feed-new-update-pill__new-update-button') as HTMLElement | null) ||
-        (document.querySelector('div.feed-new-update-pill__loader')?.closest('button') as HTMLElement | null) ||
-        (document.querySelector('button.artdeco-button.feed-new-update-pill__new-update-button') as HTMLElement | null);
-
-    if (toggle) {
-        mainFeed?.style.setProperty('display', 'none', 'important');
-        mainFeedSortButton?.style.setProperty('display', 'none', 'important');
-        loadMoreButton?.style.setProperty('display', 'none', 'important');
-        newUpdatePillButton?.style.setProperty('display', 'none', 'important');
-    } else {
-        mainFeed?.style.removeProperty('display');
-        mainFeedSortButton?.style.removeProperty('display');
-        loadMoreButton?.style.removeProperty('display');
-        newUpdatePillButton?.style.removeProperty('display');
-    }
+    replaceHiddenElements(hiddenFeedTargets, toggle ? targets : []);
 }
 
 function toggleHidePostImages(toggle: boolean) {
-    const mainFeed =
-        (document.querySelector('[data-testid="mainFeed"]') as HTMLElement | null) ||
-        (document.querySelector('[data-finite-scroll-hotkey-context="FEED"]') as HTMLElement | null) ||
-        (document.querySelector('.scaffold-finite-scroll__content') as HTMLElement | null);
+    const media = getMainFeeds().flatMap((feed) =>
+        selectAll(FILTER_SELECTORS.postImage, feed)
+            .map((image) => image.closest<HTMLElement>('figure') ?? image)
+    );
 
-    // ponytail: CDN markers avoid avatars; add another only when LinkedIn ships a new post-image path.
-    mainFeed?.querySelectorAll<HTMLElement>('img[src*="feedshare-"], img[src*="image-shrink_"]')
-        .forEach((image) => {
-            const media = image.closest('figure') || image;
-            if (toggle) media.style.setProperty('display', 'none', 'important');
-            else media.style.removeProperty('display');
+    replaceHiddenElements(hiddenPostImages, toggle ? media : []);
+}
+
+function toggleFilteredPosts(userSettings: Settings) {
+    const labelSettings = new Map<string, boolean>([
+        [FILTERED_POST_LABELS.suggested, userSettings.disableSuggested],
+        [FILTERED_POST_LABELS.promoted, userSettings.disablePromoted],
+        [FILTERED_POST_LABELS.fromActivity, userSettings.disableFromActivity],
+    ]);
+    const posts = new Set<HTMLElement>();
+
+    getMainFeeds().forEach((feed) => {
+        selectAll('span', feed).forEach((span) => {
+            const shouldHide = labelSettings.get(span.textContent?.trim() ?? '');
+            if (!shouldHide) return;
+
+            const post = span.closest<HTMLElement>(FILTER_SELECTORS.post);
+            if (post) posts.add(post);
         });
-}
+    });
 
-function deleteUnwantedSpans(type: string, element: HTMLElement | null, count: number) {
-    if ((type === 'suggested' && count === 7) ||
-        (type === 'fromActivity' && count === 7) ||
-        (type === 'promoted' && count === 9)) {
-        DEV_LOGS && console.log("Unwanted Post Detected")
-
-        if (type === 'suggested') suggestedPosts.push(element)
-        else if (type === 'fromActivity') fromActivityPosts.push(element)
-        else promotedPosts.push(element)
-        return;
-    }
-    else {
-        deleteUnwantedSpans(type, element?.parentNode as HTMLElement, count + 1);
-    }
-}
-
-function findUnwantedSpans(userSettings: Settings) {
-    console.log("findUnwantedSpans() triggered")
-    const spans = Array.from(document.getElementsByTagName("span"));
-    const suggestedSpans = spans.filter((span) => span.innerHTML.includes("Suggested"));
-    const promotedSpans = spans.filter((span) => span.innerHTML.includes("Promoted"));
-    const fromActivitySpans = spans.filter((span) => span.innerHTML.includes("From your activity"));
-
-    suggestedSpans.forEach((span) => deleteUnwantedSpans('suggested', span, 0));
-    toggleHidePosts(suggestedPosts, userSettings.disableSuggested);
-
-    promotedSpans.forEach((span) => deleteUnwantedSpans('promoted', span, 0));
-    toggleHidePosts(promotedPosts, userSettings.disablePromoted);
-
-    fromActivitySpans.forEach((span) => deleteUnwantedSpans('fromActivity', span, 0));
-    toggleHidePosts(fromActivityPosts, userSettings.disableFromActivity);
-
+    replaceHiddenElements(hiddenPosts, posts);
 }
 
 function purgerLogic(userSettings: Settings) {
-    if (["feed"].includes(getFirstPathSegment(location.href) as string)) {
+    const route = getFirstPathSegment(location.href);
+
+    if (route === 'feed') {
         toggleHideMainFeed(userSettings.disableFeed);
         toggleHidePostImages(userSettings.disableImages);
-        findUnwantedSpans(userSettings);
+        toggleFilteredPosts(userSettings);
     }
 
-    if (["feed", "mynetwork", "notifications", "messaging"].includes(getFirstPathSegment(location.href) as string)) {
-        toggleHideNewsFeed(userSettings.disableNews);
+    if (['feed', 'mynetwork', 'notifications', 'messaging'].includes(route ?? '')) {
+        toggleHideNewsFeed(userSettings.disableNews, route);
     }
-
 }
 
 export function initPurger(userSettings: Settings) {
+    purgerLogic(userSettings);
+    const observer = new MutationObserver(() => purgerLogic(userSettings));
 
-    purgerLogic(userSettings)
-    const observer = new MutationObserver(() => {
-        DEV_LOGS && console.log("mutation occurred");
-        purgerLogic(userSettings)
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['src', 'srcset', 'title'],
+        childList: true,
+        subtree: true,
     });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
+    return () => observer.disconnect();
 }

@@ -9,8 +9,9 @@
     "build": "tsc && vite build",
     "build:firefox": "tsc && FIREFOX=true vite build",
     "preview": "vite preview",
-    "sanitize-html": "node sanitize_html.js",
-    "test:sanitize-html": "node --test test_sanitize_html.js"
+    "sanitize-html": "node scripts/sanitize_html.js",
+    "test": "node --test scripts/test_filter_selectors.js scripts/test_sanitize_html.js",
+    "test:sanitize-html": "node --test scripts/test_sanitize_html.js"
   },
   "dependencies": {
     "lucide-react": "^0.562.0",

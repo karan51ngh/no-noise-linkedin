@@ -7,12 +7,13 @@
 
 ## 🚀 Features
 
+- 🎯 **Focus Mode**: Hide the entire feed to stay distraction-free.
 - 🧹 Removes **Suggested** and **Promoted** Posts from your LinkedIn feed.
 - 🧭 Removes **From your activity** Posts from your LinkedIn feed.
+- 🖼️ **No Image Mode**: Hide all post images while keeping feed text visible.
 - ❌ Blocks **LinkedIn News**, puzzles, and ad modules across the site.
-- 🎯 **Focus Mode**: Hide the entire feed to stay distraction-free.
 - 🌗 **Dark/Light Theme**: Seamlessly switch between dark and light themes.
-- ⚡️ Lightweight, open source, and privacy-friendly — no tracking!
+- ⚡️ **No Tracking**: Lightweight, open source, and privacy-friendly.
 - 🕹️ Control Panel to toggle features, reload the extension, or report an issue.
 
 
@@ -70,11 +71,15 @@
    - Click **Load Temporary Add-on...**
    - Select the `manifest.json` file inside the extracted release folder.
 
-### 🧪 Sanitizing LinkedIn HTML for filter analysis
+### 🧪 Filter analysis and checks
 
 Run `node scripts/sanitize_html.js [HTML_FILE]`. With no file, the script reads HTML from the clipboard. It writes the cleaned HTML to `sanitized.html` or `<name>.sanitized.html`, prints it, and copies it to the clipboard.
 
-Run the sanitizer tests with `node --test scripts/test_sanitize_html.js`.
+- `npm test` runs all selector and sanitizer tests.
+- `node --test scripts/test_filter_selectors.js` runs only selector regression tests.
+- `npm run test:sanitize-html` runs only sanitizer tests.
+- `npm run build` type-checks and builds the Chromium extension.
+- `npm run build:firefox` type-checks and builds the Firefox extension.
 
 ---
 
@@ -93,7 +98,8 @@ Run the sanitizer tests with `node --test scripts/test_sanitize_html.js`.
 │   │   ├── constants.ts      # Settings types and defaults
 │   │   └── useSettings.ts    # Utilities for reading/writing settings in chrome.storage
 │   ├── services/
-│   │   └── FilterEngine.ts   # Core logic for filtering posts
+│   │   ├── FilterEngine.ts   # Applies filtering to the current LinkedIn DOM
+│   │   └── filterSelectors.js # Shared semantic selectors and exact post labels
 │   ├── types/
 │   │   ├── css-raw.d.ts      # CSS raw import types
 │   │   ├── images.d.ts       # Type definitions for images
@@ -105,6 +111,7 @@ Run the sanitizer tests with `node --test scripts/test_sanitize_html.js`.
 ├── scripts/
 │   ├── build.py              # Build and package Chrome and Firefox releases
 │   ├── sanitize_html.js      # Sanitize captured DOM HTML for filter analysis
+│   ├── test_filter_selectors.js # Selector regression tests
 │   └── test_sanitize_html.js # Sanitizer tests
 ├── dist/                     # Production build output (Load this as unpacked)
 ├── index.html                # Extension popup entry (default_popup)
